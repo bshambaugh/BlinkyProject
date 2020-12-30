@@ -28,4 +28,6 @@ void test_mergeArray(void) {
    char messageString[65] = {'\0'};
    mergeArray(32,message,messageString);
    mergeArray(64,publicKey,publicKeyString);
+   TEST_ASSERT_EQUAL_STRING("000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f", messageString);
+   TEST_ASSERT_EQUAL_STRING("f9c36f8964623378bdc068d4bce07ed17c8fa486f9ac0c2613ca3c8c306d7bb61cd36717b8ac5e4fea8ad23dc8d0783c2318ee4ad7a80db6e0026ad0b072a24f", publicKeyString);
 }
