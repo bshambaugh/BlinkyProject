@@ -1,3 +1,5 @@
+#include <concatenateArray.h>
+
 /*Heltec Automation BH1750 Sensors test example
  *
  * Example of BH1750 library usage.
@@ -80,6 +82,10 @@ BH1750 lightMeter;
 
 ATECCX08A atecc;
 uint8_t message[32];
+char publicKeyString[129] = {'\0'};
+char signatureString[129] = {'\0'};
+char messageString[65] = {'\0'};
+
 
 void setup(){
   //added code
@@ -142,6 +148,15 @@ void loop() {
   Serial.println("-------------");
   Serial.println(atecc.signature[63]);
   Serial.println(atecc.publicKey64Bytes[63]);
+  mergeArray(32,message,messageString);
+  mergeArray(64,atecc.signature,signatureString);
+  mergeArray(64,atecc.publicKey64Bytes,publicKeyString);
+  Serial.println("messageString:");
+  Serial.print(messageString);
+  Serial.println("signatureString:");
+  Serial.print(signatureString);
+  Serial.println("publicKeyString:");
+  Serial.print(publicKeyString); 
   Serial.println("-------------");
   Serial.print("Light: ");
   Serial.print(lux);
