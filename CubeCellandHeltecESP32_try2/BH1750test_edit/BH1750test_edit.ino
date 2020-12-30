@@ -139,6 +139,10 @@ void loop() {
   floatToByte(lux, message);
   printMessage(); 
   atecc.createSignature(message);
+  Serial.println("-------------");
+  Serial.println(atecc.signature[63]);
+  Serial.println(atecc.publicKey64Bytes[63]);
+  Serial.println("-------------");
   Serial.print("Light: ");
   Serial.print(lux);
   Serial.println(" lx");
