@@ -164,22 +164,16 @@ void loop() {
   Serial.print("Light: ");
   Serial.print(lux);
   Serial.println(" lx");
-  delay(500);
+  delay(333);
   // add some code
   txNumber++;
-  sprintf(txpacket,"%s","Hello world number");  //start a package
   sprintf(txpacket+strlen(txpacket),"%d",txNumber); //add to the end of package
-  sprintf(txpacket+strlen(txpacket),"%f",lux); // add another thing (by bret)
   sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
-/*  sprintf(txpacket+strlen(txpacket),"%s",messageString); // add another thing (by bret)
-  sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret) */
-  sprintf(txpacket+strlen(txpacket),"%s",signatureString); // add another thing (by bret)
-  /*
+  sprintf(txpacket+strlen(txpacket),"%f",lux);
   sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
-  sprintf(txpacket+strlen(txpacket),"%s",publicKeyString); // add another thing (by bret)
-  */
+  sprintf(txpacket+strlen(txpacket),"%s",messageString); // add another thing (by bret)
 
-  Serial.print("here is the transmission packet");
+  Serial.println("here is the transmission packet: ");
   Serial.println(txpacket);
        
   turnOnRGB(COLOR_SEND,0); //change rgb color
@@ -189,9 +183,41 @@ void loop() {
 
   voidArray(BUFFER_SIZE,txpacket);
 
-  Serial.print("here is the transmission packet after void array:");
+  Serial.println("here is the transmission packet after void array:");
   Serial.println(txpacket);
 
+  /* send the public key here */
+
+  delay(333);
+  sprintf(txpacket+strlen(txpacket),"%d",txNumber); //add to the end of package
+  sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
+  sprintf(txpacket+strlen(txpacket),"%s",signatureString); // add another thing (by bret)
+
+  Serial.println("here is the transmission packet: ");
+  Serial.println(txpacket);
+       
+  turnOnRGB(COLOR_SEND,0); //change rgb color
+
+  Radio.Send( (uint8_t *)txpacket, strlen(txpacket) ); //send the package out  
+  // end of added code
+
+  voidArray(BUFFER_SIZE,txpacket);
+
+  Serial.println("here is the transmission packet after void array:");
+  Serial.println(txpacket);
+  
+  sprintf(txpacket+strlen(txpacket),"%d",txNumber); //add to the end of package
+  sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
+  sprintf(txpacket+strlen(txpacket),"%s","PublicKey"); //add to the end of package
+  sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
+  sprintf(txpacket+strlen(txpacket),"%s",publicKeyString); // add another thing (by bret)
+
+  Serial.println("here is the transmission packet with the public key array:");
+  Serial.println(txpacket);
+
+  Radio.Send( (uint8_t *)txpacket, strlen(txpacket) ); //send the package out 
+  voidArray(BUFFER_SIZE,txpacket);
+  
   voidArray(65,messageString);
   voidArray(129,signatureString);
   voidArray(129,publicKeyString);

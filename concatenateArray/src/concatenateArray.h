@@ -6,6 +6,6 @@
 
 #include <ctype.h>
 
-
+void voidArray(int len, char a[]);
 void mergeArray(int len, unsigned char *message, char *a);
 

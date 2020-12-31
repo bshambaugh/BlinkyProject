@@ -10,6 +10,7 @@
 extern void setUp(void);
 extern void tearDown(void);
 extern void test_mergeArray(void);
+extern void test_voidArray(void);
 
 
 /*=======Mock Management=====*/
@@ -72,6 +73,7 @@ int main(void)
 {
   UnityBegin("test/TestconcatenateArray.c");
   run_test(test_mergeArray, "test_mergeArray", 14);
+  run_test(test_voidArray, "test_voidArray", 35);
 
   return UnityEnd();
 }
