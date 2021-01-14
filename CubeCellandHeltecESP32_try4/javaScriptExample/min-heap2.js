@@ -29,6 +29,16 @@ class MinHeap {
             }
         }
     }
+
+    contains(node) {
+	let bool = false;
+        for(let i = 0; i < this.heap.length; i++) {
+           if(this.heap[i] == node && bool == false) {
+              bool = true;
+           }
+        }
+        return bool;
+    }
     
     remove() {
         /* Smallest element is at the index 1 in the heap array */
@@ -92,12 +102,24 @@ console.log(heapOne.heap.indexOf(7));
 console.log(heapOne.heap.indexOf(5));
 console.log(heapOne.heap);
 
+console.log("beginning of calling from heap");
 console.log(heapOne.heap[0]);
 console.log(heapOne.heap[1]);
 console.log(heapOne.heap[2]);
 console.log(heapOne.heap[3]);
+console.log("end of calling from heap");
 
+let key = 5;
+for(let i = 0; i < heapOne.heap.length; i++) {
+  if(heapOne.heap[i] == key) {
+    console.log("I have a true");
+ } else {
+    console.log("I have a false");
+ }
+}
 console.log("length before: "+heapOne.heap.length);
+
+console.log(heapOne.contains(6));
 
 heapOne.remove(2);
 
