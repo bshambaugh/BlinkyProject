@@ -1,5 +1,7 @@
 // Declare the insert int database method (bshambaugh)
-let toDB = require('./custom/insertLux.js');
+let intoDB = require('./custom/insertIntoDatabase.js');
+let HashTable = require('./custom/hashTable/HashTable.js');
+let MinHeap = require('./custom/MinHeap/MinHeap.js');
 
 /**************************websocket_example.js*************************************************/
 
@@ -53,13 +55,7 @@ s.on('connection',function(ws,req){
 ws.on('message',function(message){
 console.log("Received: "+message);
 
-// write the message to the database (bshambaugh)
-// insert testFive.js here....
-/*
-if (message.includes("lumens: "))
-  toDB.insertLux(message,table,database,host,user,password);
-*/
-// insertIntoDatabase(string,heap,message_ht,publicKey_ht,signature_ht);
+intoDB.insertIntoDatabase(message,heap,message_ht,publicKey_ht,signature_ht,table,database,user,password);
 
 s.clients.forEach(function(client){ //broadcast incoming message to all clients (s.clients)
 if(client!=ws && client.readyState ){ //except to the same client (ws) that sent this message
