@@ -9,7 +9,11 @@ class MinHeap {
         /* Accessing the min element at index 1 in the heap array */
         return this.heap[1]
     }
-    
+
+    getAtIndex(n) {
+       return this.heap[n]
+    }
+
     insert (node) {
 
         /* Inserting the new node at the end of the heap array */
