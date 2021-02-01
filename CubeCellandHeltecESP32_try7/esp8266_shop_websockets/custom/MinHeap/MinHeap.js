@@ -1,3 +1,7 @@
+// source:
+// Implementing Heaps in JavaScript - Ankita Masand
+// https://blog.bitsrc.io/implementing-heaps-in-javascript-c3fbf1cb2e65 
+
 class MinHeap {
 
     constructor () {
