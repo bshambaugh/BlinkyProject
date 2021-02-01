@@ -10,8 +10,8 @@ String data= "";
 
 char path[] = "/";   //identifier of this device
 
-const char* ssid     = "NETGEAR09";
-const char* password = "silentsky936";
+const char* ssid     = "ssid";
+const char* password = "password";
 char* host = "10.0.0.5";  //replace this ip address with the ip address of your Node.Js server
 const int espport= 3000;
   

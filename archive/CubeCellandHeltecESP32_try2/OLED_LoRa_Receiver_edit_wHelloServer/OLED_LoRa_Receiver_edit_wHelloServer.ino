@@ -25,8 +25,8 @@
 #include <WebServer.h>
 #include <ESPmDNS.h>
 
-const char* ssid     = "NETGEAR09";
-const char* password = "silentsky936";
+const char* ssid     = "ssid";
+const char* password = "password";
 // end wifi
 
 #define BAND    915E6  //you can set band here directly,e.g. 868E6,915E6
