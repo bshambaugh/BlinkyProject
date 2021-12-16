@@ -5,6 +5,22 @@ In another use case a teacher is teaching a training class and wants to give pup
 
 In another use case someone thinks it would be great to have augmented reality where the holder of an NFT is able to unlock gates, grab an electronically enabled unicorn plush toy from the stuffed animal vendor, or who knows...
 
+Ramblings ...
+"People are good at verifying digital credentials with computers and cell phones, but not so much if you want to open a gate or do it over a low bandwidth extended network.
+Brent Shambaugh  10 minutes ago
+I haven't seen many electronics projects associated with NFTs either.
+Brent Shambaugh  9 minutes ago
+NFTs seem to be totally a digital construct, like a picture of a dog, cryptographically verified to an owner....but they are not cryptographically verified to an electronic device in the physical dog collar
+Brent Shambaugh  7 minutes ago
+the dog collar cannot make cryptographically provable assertions about any health care its had, who his or her parents and siblings are .... etc...
+Brent Shambaugh  6 minutes ago
+For the longest time there have been hardware wallets for Bitcoin.
+Brent Shambaugh  6 minutes ago
+Maybe I am just reinventing the wheel around this.
+Brent Shambaugh  8 minutes ago
+I don't know. I've learned a lot. 
+"
+
 ## Rough draft
 
 This is the present Node.js server code https://github.com/bshambaugh/BlinkyProject/tree/master/CubeCellandHeltecESP32_try7/esp8266_shop_websockets . I need to make that clear.
@@ -44,3 +60,11 @@ For now, this Playlist gives earlier evolution of the Blinky Project. Much, if n
 
 Here is an earlier sketch of the architecture.
 ![alt text](readme_images/overview.png "Title")
+
+## More stuff to consider once Ceramic Network is linked in:
+https://github.com/decentralized-identity/did-jwt-vc (for verifiable credentials)
+https://www.w3.org/TR/vc-data-model/ (for verifiable credentials)
+
+https://github.com/ceramicnetwork/nft-did-resolver (for NFTs)
+
+https://medium.com/ceramic/idx-and-skydb-joins-forces-for-a-future-of-web3-hackathon-83eff179a9a1 , https://www.youtube.com/watch?v=-Y36JvYXwrw (skydb, possible storage option)
