@@ -88,5 +88,6 @@ https://www.w3.org/TR/vc-data-model/ (for verifiable credentials). The goal woul
 Geovane Fedrecheski eloquently went into the difficulties of LoRa handling at [IIW32A - session 12E](https://raw.githubusercontent.com/windley/IIW_homepage/gh-pages/assets/proceedings/IIW_32_Book_of_Proceedings_Final%20A%201.pdf).
 
 https://github.com/ceramicnetwork/nft-did-resolver (for NFTs) [It seems you would use key:did with 3ID, and 3ID with NFT]
+seeAlso: [3ID method CIP-79](https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-79/CIP-79.md)
 
 https://medium.com/ceramic/idx-and-skydb-joins-forces-for-a-future-of-web3-hackathon-83eff179a9a1 , https://www.youtube.com/watch?v=-Y36JvYXwrw (skydb, possible storage option)
