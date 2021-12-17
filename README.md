@@ -20,7 +20,7 @@ Maybe I am just reinventing the wheel around this.
 Brent Shambaugh  8 minutes ago
 I don't know. I've learned a lot. 
 "
-Interesting, ERC-721 mentions physical assets: https://eips.ethereum.org/EIPS/eip-721
+Interesting, ERC-721 (non-fungible tokens)  mentions physical assets: https://eips.ethereum.org/EIPS/eip-721
 
 ## Rough draft
 
@@ -55,6 +55,7 @@ This is to add talking to ceramic functionality to the Node.js server: https://g
 This is what I am going to try to use on the Node.js side to talk to the :doughnut: code as a remote signer. https://github.com/bshambaugh/BlinkyProject/blob/master/CubeCellandHeltecESP32_try[…]8266_shop_websockets/custom/verifySignature/verifySignatureQ.js  
 
 I predict I will follow this example code [ceramic ToDo](/CubeCellandHeltecESP32_try7/esp8266_shop_websockets/CeramicToDo/README.md)  
+This will require a P-256 version of [key-did-provider-ed25519](https://github.com/ceramicnetwork/key-did-provider-ed25519) .
 
 I tried to explain my thoughts to Joel with Ceramic in May: https://twitter.com/Brent_Shambaugh/status/1467197731101941761?s=20  
 
@@ -63,6 +64,19 @@ For now, this Playlist gives earlier evolution of the Blinky Project. Much, if n
 
 Here is an earlier sketch of the architecture.  
 ![alt text](readme_images/overview.png "Title")  
+
+Here is the Cubecell pushing data to the ESP32 in the earlier architecture:
+![CubeCell](readme_images/CubeCell_w_CryptoChip.jpeg)
+
+Here is the ESP32 receiving data from the ESP32 and pushing it to the NodeJS server:
+![ESP32](readme_images/ESP32_LoRa_Gateway.jpeg)
+
+Here is the NodeJS server receiving data from the ESP32:
+![NodeJS_One](readme_images/NodeJS_Server_Accepting_Data.jpeg)
+
+Here is the NodeJS server receiving data from the ESP32 and writing to a database and rebroadcasting on websockets:
+![NodeJS_Two](readme_images/NodeJS_Server_Accepting_Data_writingToDatabase1.png)
+![NodeJS_Three](readme_images/NodeJS_Server_Accepting_Data_writingToDatabase2.png)
 
 ## More stuff to consider once Ceramic Network is linked in:
 https://github.com/decentralized-identity/did-jwt-vc (for verifiable credentials)
