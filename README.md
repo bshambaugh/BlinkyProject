@@ -82,7 +82,8 @@ Here is the NodeJS server receiving data from the ESP32 and writing to a databas
 
 ## More stuff to consider once Ceramic Network is linked in:
 https://github.com/decentralized-identity/did-jwt-vc (for verifiable credentials)
-https://www.w3.org/TR/vc-data-model/ (for verifiable credentials)
+https://www.w3.org/TR/vc-data-model/ (for verifiable credentials). The goal would be to only have the LoRa device see streamIDs, and let ceramic take care of long JSON documents needed for credentials. 
+Geovane Fedrecheski eloquently went into the difficulties of LoRa handling at [IIW32A - session 12E](https://raw.githubusercontent.com/windley/IIW_homepage/gh-pages/assets/proceedings/IIW_32_Book_of_Proceedings_Final%20A%201.pdf).
 
 https://github.com/ceramicnetwork/nft-did-resolver (for NFTs) [It seems you would use key:did with 3ID, and 3ID with NFT]
 
