@@ -20,11 +20,12 @@ Maybe I am just reinventing the wheel around this.
 Brent Shambaugh  8 minutes ago
 I don't know. I've learned a lot. 
 "
+Interesting, ERC-721 mentions physical assets: https://eips.ethereum.org/EIPS/eip-721
 
 ## Rough draft
 
-This is the present Node.js server code https://github.com/bshambaugh/BlinkyProject/tree/master/CubeCellandHeltecESP32_try7/esp8266_shop_websockets . I need to make that clear.
-12:22
+This is the present Node.js server code https://github.com/bshambaugh/BlinkyProject/tree/master/CubeCellandHeltecESP32_try7/esp8266_shop_websockets . I need to make that clear.  
+12:22  
 This is the present ESP32 code: https://github.com/bshambaugh/BlinkyProject/tree/master/CubeCellandHeltecESP32_try7/edgeDevices/LoRaESP32/OLED_LoRa_Receiver_edit_wHelloServer
 12:25
 This is the present CubeCell code: https://github.com/bshambaugh/BlinkyProject/tree/master/CubeCellandHeltecESP32_try7/edgeDevices/Cubecell/BH1750test_edit2 (I think)
@@ -65,6 +66,6 @@ Here is an earlier sketch of the architecture.
 https://github.com/decentralized-identity/did-jwt-vc (for verifiable credentials)
 https://www.w3.org/TR/vc-data-model/ (for verifiable credentials)
 
-https://github.com/ceramicnetwork/nft-did-resolver (for NFTs)
+https://github.com/ceramicnetwork/nft-did-resolver (for NFTs) [It seems you would use key:did with 3ID, and 3ID with NFT]
 
 https://medium.com/ceramic/idx-and-skydb-joins-forces-for-a-future-of-web3-hackathon-83eff179a9a1 , https://www.youtube.com/watch?v=-Y36JvYXwrw (skydb, possible storage option)
