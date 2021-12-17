@@ -97,6 +97,6 @@ seeAlso: [3ID method CIP-79](https://github.com/ceramicnetwork/CIP/blob/main/CIP
 Sensor data needs to be transmitted securely. The first experiment only considered authentication. Ockam is looking at secure channels, and is familiar with SSI like Ceramic/3Box/uPort is: [friendly discussion](https://github.com/ockam-network/ockam/discussions/137) , [homepage](https://www.ockam.io/).
 See also X3DH & Diffe Hellman. Also, I am not sure this will help (if it is desireable to bring in Ockam).  Ockam has a preference for Rust, which can be framed in the form of C like exisitng ESP32 code has using this [library](https://github.com/espressif/rust-esp32-example)?
 
-Elliptic curves can be generated on an ESP32 without the use of a cryptographic processor. See  libraries [Elliptic-Curve-on-ESP32](https://github.com/Bizyroth/Elliptic-Curve-on-ESP32) and [micro-ecc](https://github.com/kmackay/micro-ecc) .
+Elliptic curves can be generated on an ESP32 without the use of a cryptographic co-processor. See libraries [Elliptic-Curve-on-ESP32](https://github.com/Bizyroth/Elliptic-Curve-on-ESP32) and [micro-ecc](https://github.com/kmackay/micro-ecc) . Perhaps there will be issues with securing and preserving the private keys?
 
 https://medium.com/ceramic/idx-and-skydb-joins-forces-for-a-future-of-web3-hackathon-83eff179a9a1 , https://www.youtube.com/watch?v=-Y36JvYXwrw (skydb, possible sensor data storage option)
