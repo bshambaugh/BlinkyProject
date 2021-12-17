@@ -63,6 +63,10 @@ I tried to explain my thoughts to Joel with Ceramic in May: https://twitter.com/
 He seemed to calm my worries about the data packets verifying updates being too large for LoRa to handle, since he claimed that they would be CIDs (streamIDs in ceramic in think).
 StreamID description in [CIP-59](https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-59/CIP-59.md).
 
+Ceramic eloquently allows a blockchain to maintain state, but minimized data and writes:
+see [CIP-69](https://github.com/ceramicnetwork/CIP/blob/e71e833f8249fe3663f6de8aeed572578a7866e0/CIPs/CIP-69/CIP-69.md).
+for how Ceramic describes it [Architecture] (https://developers.ceramic.network/reference/typescript/pages/Ceramic%20Typescript%20Implementation/overview.html).
+
 For now, this Playlist gives earlier evolution of the Blinky Project. Much, if not all, of the The Ceramic Network work is not included.  
 [Blinky Project on YouTube](https://www.youtube.com/playlist?list=PLbVZNfQhcZ3eQpiBUY_0IaXPmPE5pZoOT))  
 
