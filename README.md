@@ -58,6 +58,7 @@ I predict I will follow this example code [ceramic ToDo](/CubeCellandHeltecESP32
 This will require a P-256 version of [key-did-provider-ed25519](https://github.com/ceramicnetwork/key-did-provider-ed25519) .
 
 I tried to explain my thoughts to Joel with Ceramic in May: https://twitter.com/Brent_Shambaugh/status/1467197731101941761?s=20  
+He seemed to calm my worries about the data packets verifying updates being too large for LoRa to handle, since he claimed that they would be CIDs (streamIDs in ceramic in think).
 
 For now, this Playlist gives earlier evolution of the Blinky Project. Much, if not all, of the The Ceramic Network work is not included.  
 [Blinky Project on YouTube](https://www.youtube.com/playlist?list=PLbVZNfQhcZ3eQpiBUY_0IaXPmPE5pZoOT))  
