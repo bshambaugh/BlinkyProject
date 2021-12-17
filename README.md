@@ -22,6 +22,8 @@ I don't know. I've learned a lot.
 "
 Interesting, ERC-721 (non-fungible tokens)  mentions physical assets: https://eips.ethereum.org/EIPS/eip-721
 
+Adding LoRa could allow for greater geographic coverage. I was able to pull data from a Cubecell transmission a third of a mile away.
+
 ## Rough draft
 
 This is the present Node.js server code https://github.com/bshambaugh/BlinkyProject/tree/master/CubeCellandHeltecESP32_try7/esp8266_shop_websockets . I need to make that clear.  
