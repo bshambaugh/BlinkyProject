@@ -100,3 +100,4 @@ See also X3DH & Diffe Hellman. Also, I am not sure this will help (if it is desi
 Elliptic curves can be generated on an ESP32 without the use of a cryptographic co-processor. See libraries [Elliptic-Curve-on-ESP32](https://github.com/Bizyroth/Elliptic-Curve-on-ESP32) and [micro-ecc](https://github.com/kmackay/micro-ecc) . Perhaps there will be issues with securing and preserving the private keys?
 
 https://medium.com/ceramic/idx-and-skydb-joins-forces-for-a-future-of-web3-hackathon-83eff179a9a1 , https://www.youtube.com/watch?v=-Y36JvYXwrw (skydb, possible sensor data storage option)
+seeAlso: [Encrypted Data Vaults](https://github.com/decentralized-identity/edv-spec) and whatever Ceramic is trying to integrate with.
