@@ -66,7 +66,7 @@ Here is an earlier sketch of the architecture.
 ![alt text](readme_images/overview.png "Title")  
 
 Here is the Cubecell pushing data to the ESP32 in the earlier architecture:
-![CubeCell](readme_images/CubeCell_w_CryptoChip.jpeg)
+![CubeCell](readme_images/CubeCell_w_CryptoChip.png)
 
 Here is the ESP32 receiving data from the ESP32 and pushing it to the NodeJS server:
 ![ESP32](readme_images/ESP32_LoRa_Gateway.jpeg)
