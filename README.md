@@ -100,7 +100,7 @@ https://www.w3.org/TR/vc-data-model/ (for verifiable credentials). The goal woul
 Geovane Fedrecheski eloquently went into the difficulties of LoRa handling at [IIW32A - session 12E](https://raw.githubusercontent.com/windley/IIW_homepage/gh-pages/assets/proceedings/IIW_32_Book_of_Proceedings_Final%20A%201.pdf).
 To get this working with and Agent talking to the Node.js server, which talks to the ceramic network, consider Bjorn Hamel's excellent talk: [Adventures in Self-Soverign Identity](https://www.youtube.com/watch?v=Uu651GJ5YY0) .
 
-For Authorization, consider looking at: [Authorization Capabilities for Linked Data v0.3](https://w3c-ccg.github.io/zcap-ld/). Thank you to the W3C CCG Mailing List. Further exploration for this by Ceramic is described in this [blog post]((https://blog.ceramic.network/capability-based-data-security-on-ceramic/) which talks about [CACAO](https://github.com/ceramicnetwork/cacao) in the context of "Capability Based Security for Ceramic".
+For Authorization, consider looking at: [Authorization Capabilities for Linked Data v0.3](https://w3c-ccg.github.io/zcap-ld/). Thank you to the W3C CCG Mailing List. Further exploration for this by Ceramic is described in this [blog post](https://blog.ceramic.network/capability-based-data-security-on-ceramic/) which talks about [CACAO](https://github.com/ceramicnetwork/cacao) in the context of "Capability Based Security for Ceramic".
 
 https://github.com/ceramicnetwork/nft-did-resolver (for NFTs) [It seems you would use key:did with 3ID, and 3ID with NFT]
 seeAlso: [3ID method CIP-79](https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-79/CIP-79.md)
