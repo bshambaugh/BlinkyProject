@@ -62,7 +62,12 @@ Here is a visual representation of how the code will fit together:
 I predict I will follow this example code [ceramic ToDo](/CubeCellandHeltecESP32_try7/esp8266_shop_websockets/CeramicToDo/README.md)  
 This will require a P-256 version of [key-did-provider-ed25519](https://github.com/ceramicnetwork/key-did-provider-ed25519) .
 
-I tried to explain my thoughts to Joel with Ceramic in May: https://twitter.com/Brent_Shambaugh/status/1467197731101941761?s=20  
+I will call this something like key-did-provider-P256 or key-did-provider-NIST (if I want to support P-256, P-384, and P-521 by the same provider).
+This key-did-provider will depend on [did-jwt](https://github.com/decentralized-identity/did-jwt/), [rpc-utils](https://github.com/ceramicnetwork/js-rpc-utils) , and [dids](https://github.com/ceramicnetwork/js-did) . The resolver for the key-did-provider is being implemented here [PR 1884](https://github.com/ceramicnetwork/js-ceramic/pull/1884).
+
+Support for did-jwt for P-256 for the provider is described here: [PR 212](https://github.com/decentralized-identity/did-jwt/pull/212) and being implemented here: [did-jwt](https://github.com/bshambaugh/did-jwt) (I believe this needs to be done). rpc-utils and dids do not need to be changed.
+
+I tried to explain my thoughts to Joel with Ceramic in May: [twitter post about Joel](https://twitter.com/Brent_Shambaugh/status/1467197731101941761?s=20)  
 He seemed to calm my worries about the data packets verifying updates being too large for LoRa to handle, since he claimed that they would be CIDs (streamIDs in ceramic in think).
 StreamID description in [CIP-59](https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-59/CIP-59.md).
 
