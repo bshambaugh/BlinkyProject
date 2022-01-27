@@ -1,7 +1,7 @@
 ## Possible Use Cases
 There are two guys: Joe and Sam. Joe has a few ESP32 devices with various sensors and widgets attached. So does Sam. Sam is getting to know Joe, and would like to provide him access to some sensors. He also wants to store his sensor data in a distributed way because he doesn't trust the big cloud providers. He also like the immutable web of trust, but does not want to settle on a particular blockchain. Sam creates a ceramic document that gives Joe access to the data come from  some his sensors and widgets, and even to an even fewer number he gives Joe to ability to turn on and off the sensor or the widget.
 
-In another use case a teacher is teaching a training class and wants to give pupils access to lockers and equipment (golf carts, power tools)  and rooms to stay they night , but does not want the hassle dealing with physical keys. The teacher just wants things to work once the pupil satisfactorily completes the training. For this did-jwt-vc is considered.
+In another use case a teacher is teaching a training class and wants to give pupils access to lockers and equipment (golf carts, power tools)  and rooms to stay they night , but does not want the hassle dealing with physical keys. The teacher just wants things to work once the pupil satisfactorily completes the training. For this [did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc) is considered.
 
 In another use case someone thinks it would be great to have augmented reality where the holder of an NFT is able to unlock gates, grab an electronically enabled unicorn plush toy from the stuffed animal vendor, or who knows...
 
