@@ -100,13 +100,14 @@ https://www.w3.org/TR/vc-data-model/ (for verifiable credentials). The goal woul
 Geovane Fedrecheski eloquently went into the difficulties of LoRa handling at [IIW32A - session 12E](https://raw.githubusercontent.com/windley/IIW_homepage/gh-pages/assets/proceedings/IIW_32_Book_of_Proceedings_Final%20A%201.pdf).
 To get this working with and Agent talking to the Node.js server, which talks to the ceramic network, consider Bjorn Hamel's excellent talk: [Adventures in Self-Soverign Identity](https://www.youtube.com/watch?v=Uu651GJ5YY0) .
 
-For Authorization, consider looking at: [Authorization Capabilities for Linked Data v0.3](https://w3c-ccg.github.io/zcap-ld/). Thank you to the W3C CCG Mailing List.
+For Authorization, consider looking at: [Authorization Capabilities for Linked Data v0.3](https://w3c-ccg.github.io/zcap-ld/). Thank you to the W3C CCG Mailing List. Further exploration for this by Ceramic is described in this [blog post]((https://blog.ceramic.network/capability-based-data-security-on-ceramic/) which talks about [CACAO](https://github.com/ceramicnetwork/cacao) in the context of "Capability Based Security for Ceramic".
 
 https://github.com/ceramicnetwork/nft-did-resolver (for NFTs) [It seems you would use key:did with 3ID, and 3ID with NFT]
 seeAlso: [3ID method CIP-79](https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-79/CIP-79.md)
 
 Sensor data needs to be transmitted securely. The first experiment only considered authentication. Ockam is looking at secure channels, and is familiar with SSI like Ceramic/3Box/uPort is: [friendly discussion](https://github.com/ockam-network/ockam/discussions/137) , [homepage](https://www.ockam.io/).
 See also X3DH & Diffe Hellman. Also, I am not sure this will help (if it is desireable to bring in Ockam).  Ockam has a preference for Rust, which can be framed in the form of C like exisitng ESP32 code has using this [library](https://github.com/espressif/rust-esp32-example)?
+To integrate Node.js with Rust also see: [Rust is the Future of JavaScript Infrastructure](https://leerob.io/blog/rust).
 
 Elliptic curves can be generated on an ESP32 without the use of a cryptographic co-processor. See libraries [Elliptic-Curve-on-ESP32](https://github.com/Bizyroth/Elliptic-Curve-on-ESP32) and [micro-ecc](https://github.com/kmackay/micro-ecc) . Perhaps there will be issues with securing and preserving the private keys?
 
