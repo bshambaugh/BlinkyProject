@@ -62,7 +62,7 @@ Here is a visual representation of how the code will fit together:
 I predict I will follow this example code [ceramic ToDo](/CubeCellandHeltecESP32_try7/esp8266_shop_websockets/CeramicToDo/README.md)  
 This will require a P-256 version of [key-did-provider-ed25519](https://github.com/ceramicnetwork/key-did-provider-ed25519) .
 
-I will call this something like key-did-provider-P256 or key-did-provider-NIST (if I want to support P-256, P-384, and P-521 by the same provider).
+I will call this something like key-did-provider-P256 (edit now here: [key-did-provider-p256](https://github.com/bshambaugh/key-did-provider-p256)) or key-did-provider-NIST (if I want to support P-256, P-384, and P-521 by the same provider).
 This key-did-provider will depend on [did-jwt](https://github.com/decentralized-identity/did-jwt/), [rpc-utils](https://github.com/ceramicnetwork/js-rpc-utils) , and [dids](https://github.com/ceramicnetwork/js-did) . The resolver for the key-did-provider is being implemented here [PR 1884](https://github.com/ceramicnetwork/js-ceramic/pull/1884).
 
 Support for did-jwt for P-256 for the provider is described here: [PR 212](https://github.com/decentralized-identity/did-jwt/pull/212) and being implemented here: [did-jwt](https://github.com/bshambaugh/did-jwt) (I believe this needs to be done). rpc-utils and dids do not need to be changed.
