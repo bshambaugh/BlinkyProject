@@ -97,7 +97,7 @@ Here is the ESP32 receiving data from the ESP32 and pushing it to the NodeJS ser
 Here is the NodeJS server receiving data from the ESP32:
 ![NodeJS_One](readme_images/NodeJS_Server_Accepting_Data.jpeg)
 
-Here is the NodeJS server receiving data from the ESP32 and writing to a database and rebroadcasting on websockets:
+Here is the NodeJS server receiving data from the ESP32 and writing to a SQL database and rebroadcasting on websockets:
 ![NodeJS_Two](readme_images/NodeJS_Server_Accepting_Data_writingToDatabase1.png)
 ![NodeJS_Three](readme_images/NodeJS_Server_Accepting_Data_writingToDatabase2.png)
 
