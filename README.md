@@ -59,6 +59,10 @@ This is what I am going to try to use on the Node.js side to talk to the :doughn
 Here is a visual representation of how the code will fit together:
 ![overview_code_sm.png](readme_images/overview_code_sm.png)
 
+The code I have been working on is particular to the P-256 curve. I had hoped that development would inform my general understanding of ceramic integration. Some of the code will be re-used if another cryptographic curve is used (particularly the code on the Heltec LoRa ESP32 and CubeCell as well as the general flow
+of the code on the CeramicToDo). Finding an edge device on the network has been an idea explored and current research and/or thinking suggests this will combine a did:key (unique identifier provided by the cryptographic co-processor re-written) and some form of index of the ceramic network. At least my gut
+feeling has been that it might be better to persist data stored from sensors in SkyNet/SkyDB and integrate this with ceramic as in an earlier tutorial provided by Ceramic.
+
 I predict I will follow this example code [ceramic ToDo](/CubeCellandHeltecESP32_try7/esp8266_shop_websockets/CeramicToDo/README.md)  
 This will require a P-256 version of [key-did-provider-ed25519](https://github.com/ceramicnetwork/key-did-provider-ed25519) .
 
