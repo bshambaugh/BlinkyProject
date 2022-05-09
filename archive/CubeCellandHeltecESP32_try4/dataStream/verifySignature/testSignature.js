@@ -1,7 +1,0 @@
-let crypto = require('./verifySignatureQ.js');
-
-let message = "416fffff00000000000000000000000000000000000000000000000000000000";
-let signature = "cb49cbc14fe58164e2ba36360c90bcf683f4c5fdf2978d983b4ec035fe1d320f5bded6827796a5baf3095ef325dd428e75073cd8dae39bd1bec77c0e008e37bd";
-let publicKey = "f9c36f8964623378bdc068d4bce07ed17c8fa486f9ac0c2613ca3c8c306d7bb61cd36717b8ac5e4fea8ad23dc8d0783c2318ee4ad7a80db6e0026ad0b072a24f";
-
-crypto.verifySignatureQ(message,signature,publicKey);
