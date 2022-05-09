@@ -1,0 +1,24 @@
+{
+   "compilerOptions": {
+     "module": "commonjs",
+     "lib": ["es6", "dom", "esnext"],
+     "target": "ES2020",
+     "declaration": true,
+     "declarationMap": true,
+     "skipLibCheck": true,
+     "resolveJsonModule": true,
+     "removeComments": true,
+     "esModuleInterop": true,
+     "emitDecoratorMetadata": true,
+     "experimentalDecorators": true,
+     "sourceMap": true,
+     "typeRoots": [
+       "./types", "node_modules/@types"
+     ],
+     "outDir":"lib",
+     "rootDir":"src"
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
