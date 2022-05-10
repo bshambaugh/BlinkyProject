@@ -1,2 +1,4 @@
-./node_modules
-./coverage
+*.log
+node_modules
+lib
+coverage
