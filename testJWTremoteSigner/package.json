@@ -2,7 +2,6 @@
   "name": "testjwtremotesigner",
   "version": "1.0.0",
   "description": "Create did-jwt remote signer",
-  "type": "module",
   "keywords": [
     "jwt",
     "key",
@@ -26,9 +25,6 @@
     "prebuild": "npm run clean",
     "lint": "./node_modules/.bin/eslint ./src --ext .js,.jsx,.ts,.tsx",
     "clean": "rm -rf ./lib"
-  },
-  "jest": {
-    "preset": "ts-jest"
   },
   "dependencies": {
     "did-jwt": "^6.0.0",

@@ -1,4 +1,4 @@
-import { JsonWebTokenT, signer } from '../src/asycHexSignature_e-short2';
+import { JsonWebTokenT, signer } from '../src/mockup_hsm_calling_javascript_func';
 
 describe('it should return true', () => {
   it('Signer should returned a signed value from jwt, maybe?', async () => {
@@ -10,4 +10,5 @@ describe('it should return true', () => {
     const generatedDIDJWT = await JsonWebTokenT('howdy')
     expect(typeof generatedDIDJWT).toBe('string')
   });
+  
 })
