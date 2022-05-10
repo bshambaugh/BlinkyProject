@@ -2,7 +2,6 @@
   "name": "testjwtremotesigner",
   "version": "1.0.0",
   "description": "Create did-jwt remote signer",
-  "type": "module",
   "keywords": [
     "jwt",
     "key",
@@ -19,15 +18,13 @@
     "lib"
   ],
   "scripts": {
-    "test": "./node_modules/.bin/jest --silent --coverage --env=node",
-    "build": "./node_modules/.bin/tsc -p tsconfig.json",
+    "test": "jest --silent",
+    "build": "tsc -p tsconfig.json",
+    "start": "ts-node ./src/asycHexSignature_e-short2.ts",
     "prepublishOnly": "npm run build",
     "prebuild": "npm run clean",
     "lint": "./node_modules/.bin/eslint ./src --ext .js,.jsx,.ts,.tsx",
     "clean": "rm -rf ./lib"
-  },
-  "jest": {
-    "preset": "ts-jest"
   },
   "dependencies": {
     "did-jwt": "^6.0.0",

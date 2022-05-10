@@ -4,15 +4,11 @@ import * as EC from 'elliptic'
 
 var ec = new EC.ec('p256');
 
-const valueString = 'howdy';
-const value = u8a.fromString(valueString);
-
-export function bytesToBase64url(b: Uint8Array) {
+function bytesToBase64url(b: Uint8Array) {
   return u8a.toString(b, 'base64url')
 }
 
-export async function callToHSM(value: Uint8Array): Promise<Uint8Array> {
-    
+export function callToHSM(value: string): Uint8Array {
     const privateKey = '0x040f1dbf0a2ca86875447a7c010b0fc6d39d76859c458fbe8f2bf775a40ad74a'
     const keypairTemp = ec.keyFromPrivate(privateKey)
     const buffferMsg = Buffer.from(value)
@@ -21,25 +17,29 @@ export async function callToHSM(value: Uint8Array): Promise<Uint8Array> {
     const yOctet = u8a.fromString(hexSig.s.toString(),'base10');
     const hexR = u8a.toString(xOctet,'base16');
     const hexS = u8a.toString(yOctet,'base16');
+
     return u8a.fromString(hexR+hexS,'hex');
-   
 }
 
-export async function JsonWebToken(value: Uint8Array): Promise<string> {
- const signatureBytes = await callToHSM(value)
- return bytesToBase64url(signatureBytes)
+// i would rename this function
+function JsonWebToken(value: string): string {
+ return bytesToBase64url(callToHSM(value))
 }
 
-let signer = async () => { return await JsonWebToken(value) }
-
-export async function JsonWebTokenT() {
-  let jwt = await didJWT.createJWT(
-     { aud: 'did:ethr:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74', exp: 1957463421, name: 'uPort Developer' },
-     { issuer: 'did:ethr:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74', signer }//,
-    // { alg: 'ES256' }
-  )
-  console.log(jwt)
+//const stringOrNullWeird: () => Promise<string> = async ()
+export function signer (value: string): any { 
+  return (): any=> {
+    return JsonWebToken(value) 
+  }
 }
+;
+export async function JsonWebTokenT(value: string): Promise<string> {
 
-JsonWebTokenT()
+  const signerWithPresetValue = signer(value)
 
+  return didJWT.createJWT(
+    { aud: 'did:ethr:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74', exp: 1957463421, name: 'uPort Developer' },
+    { issuer: 'did:ethr:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74', signer: signerWithPresetValue }//,
+   // { alg: 'ES256' }
+ )
+}
