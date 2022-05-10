@@ -37,16 +37,17 @@ startWebSocketLoop();
 function startWebSocketLoop() {
    s.on('connection', function(ws,req) {
       
-     sendMessage(ws);
-
+     requestSignature(ws);
+     // wrap this code below in asynchronous code
+     await getSignedData(ws);
   });
 }
 
-function sendMessage(ws) {
+function requestSignature(ws) {
   ws.send('2'+'1200'+'e2bc6e7c4223f5e2f2fd69736216e71348d122ae644ca8a0cca1d2598938b048')
 }
 
-function getReply(ws) {
+async function getSignedData(ws) {
    //let reply = true;
    //return reply;
    const reply = new Promise((resolve,reject) => {
