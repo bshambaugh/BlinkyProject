@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -23,11 +27,10 @@ const didJWT = __importStar(require("did-jwt"));
 const u8a = __importStar(require("uint8arrays"));
 const EC = __importStar(require("elliptic"));
 var ec = new EC.ec('p256');
-const value = 'howdy';
 function bytesToBase64url(b) {
     return u8a.toString(b, 'base64url');
 }
-async function callToHSM(value) {
+function callToHSM(value) {
     const privateKey = '0x040f1dbf0a2ca86875447a7c010b0fc6d39d76859c458fbe8f2bf775a40ad74a';
     const keypairTemp = ec.keyFromPrivate(privateKey);
     const buffferMsg = Buffer.from(value);
@@ -39,10 +42,12 @@ async function callToHSM(value) {
     return u8a.fromString(hexR + hexS, 'hex');
 }
 async function JsonWebToken(value) {
-    const signatureBytes = await callToHSM(value);
-    return bytesToBase64url(signatureBytes);
+    return bytesToBase64url(callToHSM(value));
 }
-let signer = async () => { await JsonWebToken(value); };
+function signer() {
+    const value = 'howdy';
+    return JsonWebToken(value);
+}
 async function JsonWebTokenT() {
     let jwt = await didJWT.createJWT({ aud: 'did:ethr:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74', exp: 1957463421, name: 'uPort Developer' }, { issuer: 'did:ethr:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74', signer });
     console.log(jwt);
