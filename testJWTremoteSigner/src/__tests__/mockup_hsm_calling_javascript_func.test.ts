@@ -1,4 +1,4 @@
-import * as mapper from "../mockup_calling_javascript_func"
+import * as mapper from "../mockup_hsm_calling_javascript_func"
 import * as u8a from 'uint8arrays'
 
 describe('testJWT mapper', () => {
