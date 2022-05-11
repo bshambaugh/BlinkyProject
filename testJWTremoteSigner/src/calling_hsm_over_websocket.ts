@@ -3,19 +3,57 @@ import * as u8a from 'uint8arrays'
 import * as EC from 'elliptic'
 import * as http from 'http'
 import * as WebSocket from 'ws'
+//import WebSocket, { createWebSocketStream, WebSocketServer } from 'ws';
 
 /**************************websocket_example.js*************************************************/
 const server = http.createServer();
-const s = new WebSocket.Server({ server });
+const websocketServer = new WebSocket.Server({ server });
 
 //***************this snippet gets the local ip of the node.js server. copy this ip to the client side code and add ':3000' *****
-//****************exmpl. 192.168.56.1---> var sock =new WebSocket("ws://192.168.56.1:3000");*************************************
 
+//****************exmpl. 192.168.56.1---> var sock =new WebSocket("ws://192.168.56.1:3000");*************************************
 require('dns').lookup(require('os').hostname(), function (err, add, fam) {
   console.log('addr: '+add);
 })
 
-startWebSocketLoop();
+
+websocketServer.on('connection', function connection(ws) {
+  console.log("client connected");
+  const duplexWebSocketStream = WebSocket.createWebSocketStream(ws, { encoding: 'utf8' });
+  duplexWebSocketStream.write('2'+'1200'+'e2bc6e7c4223f5e2f2fd69736216e71348d122ae644ca8a0cca1d2598938b048');
+  duplexWebSocketStream.write("01200f9c36f8964623378bdc068d4bce07ed17c8fa486f9ac0c2613ca3c8c306d7bb61cd36717b8ac5e4fea8ad23dc8d0783c2318ee4ad7a80db6e0026ad0b072a24fa");
+  duplexWebSocketStream.on('message',function message(data) {
+           console.log('received: %s', data); /// get the reponse of the signature
+  })
+});
+
+server.listen(3000);
+
+/*
+s.on('connection',function(ws,req){
+
+ws.on('close', function(){
+console.log("lost one client");
+});
+ws.send("new client connected");
+console.log("new client connected");
+
+var interval = setInterval(function(){
+  console.log('Hello World');
+  ws.send("01200f9c36f8964623378bdc068d4bce07ed17c8fa486f9ac0c2613ca3c8c306d7bb61cd36717b8ac5e4fea8ad23dc8d0783c2318ee4ad7a80db6e0026ad0b072a24fa");
+  ws.send("11200");
+  ws.send("11200f9c36f8964623378bdc068d4bce07ed17c8fa486f9ac0c2613ca3c8c306d7bb61cd36717b8ac5e4fea8ad23dc8d0783c2318ee4ad7a80db6e0026ad0b072a24f");
+  ws.send("20000f9c36f8964623378bdc068d4bce07ed17c8fa486f9ac0c2613ca3c8c306d7bb61cd36717b8ac5e4fea8ad23dc8d0783c2318ee4ad7a80db6e0026ad0b072a24f");
+  ws.send("getSignature");
+  ws.send("getPublicKey");
+}, 2000);
+
+ws.on('message', function message(data) {
+  console.log('received: %s', data);
+});
+*/
+
+//startWebSocketLoop();
 
 // The websocket connection needs to persist to listen for/act on events
 // These events are incoming and outgoing traffic
@@ -33,7 +71,7 @@ startWebSocketLoop();
  // *      })
 //  * )
 //  **//
-
+/*
 function startWebSocketLoop() {
    s.on('connection', function(ws,req) {
       
@@ -61,3 +99,4 @@ async function getSignedData(ws) {
      resolve(data);
    });
 }
+*/
