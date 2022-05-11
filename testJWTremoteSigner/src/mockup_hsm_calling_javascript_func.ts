@@ -21,18 +21,12 @@ export function callToHSM(value: string): Uint8Array {
     return u8a.fromString(hexR+hexS,'hex');
 }
 
-// i would rename this function
-function JsonWebToken(value: string): string {
- return bytesToBase64url(callToHSM(value))
-}
-
-//const stringOrNullWeird: () => Promise<string> = async ()
 export function signer (value: string): any { 
   return (): any=> {
-    return JsonWebToken(value) 
+   return bytesToBase64url(callToHSM(value))
   }
 }
-;
+
 export async function JsonWebTokenT(value: string): Promise<string> {
 
   const signerWithPresetValue = signer(value)
