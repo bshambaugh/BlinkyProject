@@ -1,0 +1,77 @@
+const didJWT = require('did-jwt')
+var u8a = require('uint8arrays');
+var EC = require('elliptic').ec;
+
+/**************************websocket_example.js*************************************************/
+
+var http = require('http');
+const server = http.createServer();
+
+//***************this snippet gets the local ip of the node.js server. copy this ip to the client side code and add ':3000' *****
+//****************exmpl. 192.168.56.1---> var sock =new WebSocket("ws://192.168.56.1:3000");*************************************
+require('dns').lookup(require('os').hostname(), function (err, add, fam) {
+  console.log('addr: '+add);
+})
+
+/**********************websocket setup**************************************************************************************/
+//var expressWs = require('express-ws')(app,server);
+const WebSocket = require('ws');
+const s = new WebSocket.Server({ server });
+
+var ec = new EC('p256');
+
+const value = 'howdy'; // convert to Uint8Array
+
+function bytesToBase64url(b: Uint8Array) {
+  return u8a.toString(b, 'base64url')
+}
+
+async function callHSM(value: Uint8Array,curve: String) {
+   const digest = hash(value);
+   const digestHex = toString(digest,'hex');
+   s.on('connection',function(ws,req){
+    var interval = setInterval(function(){
+    ws.send('2'+curve+digestHex); /// send the data out over websockets to be signed
+    }, 2000);
+    ws.on('message', function message(data) {
+        console.log('received: %s', data);  /// get the response of the signature
+    }
+   });
+}
+
+/// this is the functionality i want to have. If a value could be returned some other way, like with streams great
+/*
+async function callHSM(value: Uint8Array,curve: String): Uint8Array {
+   const digest = hash(value);
+   const digestHex = toString(digest,'hex'); 
+   s.on('connection',function(ws,req){
+     ws.send('2'+curve+digestHex); /// send the data out over websockets to be signed
+    // ws.send("2'+'1200'+'e2bc6e7c4223f5e2f2fd69736216e71348d122ae644ca8a0cca1d2598938b048');
+    return await waitForSignature(ee); /// get the response of the signature and return so it can be fed to signer in JsonWebTokenT
+   });
+}
+
+function dataResponse(data) { return data; }
+
+function waitForSignature(ws) {
+   return new Promise((messageTwo) =>  { ws.on('message',dataResponse) });
+}
+*/
+
+async function JsonWebToken(value: string) {
+ const signatureBytes = await callToHSM(value)
+ return bytesToBase64url(signatureBytes)
+}
+
+let signer = async () =>  { return await JsonWebToken(value) }
+
+async function JsonWebTokenT() {
+  let jwt = await didJWT.createJWT(
+     { aud: 'did:ethr:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74', exp: 1957463421, name: 'uPort Developer' },
+     { issuer: 'did:ethr:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74', signer }//,
+    // { alg: 'ES256' }
+  )
+  console.log(jwt)
+}
+
+JsonWebTokenT()
