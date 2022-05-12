@@ -53,6 +53,37 @@ ws.on('message', function message(data) {
 });
 */
 
+/*
+function bytesToBase64url(b: Uint8Array) {
+  return u8a.toString(b, 'base64url')
+}
+
+export function callToHSM(value: string): Uint8Array {
+    // call websocket connection to get signature
+    // ws.send("21200f9c36f8964623378bdc068d4bce07ed17c8fa486f9ac0c2613ca3c8c306d7bb61cd36717b8ac5e4fea8ad23dc8d0783c2318ee4ad7a80db6e0026ad0b072a24f");
+    // const response = (ws.on('message', function message(data) { return data; });)
+    return u8a.fromString(response,'hex');
+}
+
+export function signer (value: string): any { 
+  return (): any=> {
+   return bytesToBase64url(callToHSM(value))
+  }
+}
+
+export async function JsonWebTokenT(value: string): Promise<string> {
+
+  const signerWithPresetValue = signer(value)
+
+  return didJWT.createJWT(
+    { aud: 'did:ethr:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74', exp: 1957463421, name: 'uPort Developer' },
+    { issuer: 'did:ethr:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74', signer: signerWithPresetValue }//,
+   // { alg: 'ES256' }
+ )
+}
+
+
+
 //startWebSocketLoop();
 
 // The websocket connection needs to persist to listen for/act on events
