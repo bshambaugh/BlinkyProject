@@ -86,22 +86,24 @@ export async function JsonWebTokenT(value: string): Promise<string> {
 
 //startWebSocketLoop();
 
-// The websocket connection needs to persist to listen for/act on events
-// These events are incoming and outgoing traffic
-// There could be a promise, running with a websocket connection, that sends out data and listens for a response 
+/*
+ The websocket connection needs to persist to listen for/act on events
+ These events are incoming and outgoing traffic
+ There could be a promise, running with a websocket connection, that sends out data and listens for a response 
 
-//***********************************************************************************************************
- // * Functionally I need to look like:
-//  * 
- // * s.on('connection', function(ws,req) {
- // *       // ws.send('2'+curve+digestHex);
-//  *       ws.send('2'+'1200'+'e2bc6e7c4223f5e2f2fd69736216e71348d122ae644ca8a0cca1d2598938b048');
-//  *      /// replace below with function waitForSignature, which returns data     
-//  *  ws.on('message',function message(data) {
- // *            console.log('received: %s', data); /// get the reponse of the signature
- // *      })
-//  * )
-//  **//
+***********************************************************************************************************
+  * Functionally I need to look like:
+  * 
+  * s.on('connection', function(ws,req) {
+  *       // ws.send('2'+curve+digestHex);
+  *       ws.send('2'+'1200'+'e2bc6e7c4223f5e2f2fd69736216e71348d122ae644ca8a0cca1d2598938b048');
+  *      /// replace below with function waitForSignature, which returns data     
+  *  ws.on('message',function message(data) {
+  *            console.log('received: %s', data); /// get the reponse of the signature
+  *      })
+  * )
+
+*/
 /*
 function startWebSocketLoop() {
    s.on('connection', function(ws,req) {
