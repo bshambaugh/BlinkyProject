@@ -3,7 +3,7 @@ import * as u8a from 'uint8arrays'
 import * as EC from 'elliptic'
 import * as http from 'http'
 //import * as WebSocket from 'ws'
-import * as WebSocket from 'websocket-stream'
+import WebSocketStream, * as WebSocket from 'websocket-stream'
 
 //import WebSocket, { createWebSocketStream, WebSocketServer } from 'ws';
 
@@ -38,12 +38,14 @@ async function writer(stream,payload) {
     stream.setEncoding('utf8');
     let data = '';
     let string = '2'+'1200'+payload;
-    stream.write(string,() => console.log('I am a penguin'));
+    stream.write(string,() => console.log('I am a penguin'));  
     stream.on('data',(chunk) => {
       console.log('the chunk is',chunk);
-      data += chunk;  // see: https://nodesource.com/blog/understanding-streams-in-nodejs/
+      console.log(`Received ${chunk.length} bytes of data.`);
+      data = chunk.toString();
+      //data += chunk;  // see: https://nodesource.com/blog/understanding-streams-in-nodejs/
       // I am not sure how to store the chunk of data from the stream to a variable .. data has no value
-      chunk = '';
+      //chunk = '';
     })
     return data;
 }

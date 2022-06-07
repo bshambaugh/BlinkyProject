@@ -175,6 +175,7 @@ void websocketSendPublicKey() {
          sprintf(txpacket+strlen(txpacket),"%s","publicKey"); // add another thing (by bret)
          sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
          sprintf(txpacket+strlen(txpacket),"%s",publicKeyString); // add another thing (by bret)
+         sprintf(txpacket+strlen(txpacket),"%s","\n"); // add another thing (by bret)
     
          Serial.println(txpacket); 
 
@@ -203,6 +204,7 @@ void websocketGetSignature(char *payload) {
          sprintf(txpacket+strlen(txpacket),"%s","signature"); // add another thing (by bret)
          sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
          sprintf(txpacket+strlen(txpacket),"%s",signatureString); // add another thing (by bret)
+         sprintf(txpacket+strlen(txpacket),"%s","\n"); // add another thing (by bret)
     
          Serial.println(txpacket); 
 
