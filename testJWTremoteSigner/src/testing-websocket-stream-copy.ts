@@ -37,7 +37,7 @@ websocketServer.on('stream',function(stream,request) {
 async function writer(stream,payload) {
     stream.setEncoding('utf8');
     let data = '';
-    let string = '1'+'1200'+payload;
+    let string = '2'+'1200'+payload;
     stream.write(string,() => console.log('I am a penguin'));  
     stream.on('data',(chunk) => {
       console.log('the chunk is',chunk);
