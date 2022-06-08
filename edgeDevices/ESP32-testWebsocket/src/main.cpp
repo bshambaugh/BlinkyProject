@@ -95,10 +95,12 @@ void loop() {
     // websocket needs to sendData public key, but it needs to stop doing this until it is asked again.
  
     // the getSignature and getPublicKey will process all of the requests from the Node.js server.
+    /*
     webSocketClient.getData(data); 
     Serial.println(data);  // this does something, but I am not sure that the data is formatted correctly
-
-    webSocketClient.sendData(host);
+    */
+    
+    webSocketClient.sendData(String(random(0,10)));
 
     /// only run the code below if 0,1,2 is the first byte...length of string should be at least two
    // Serial.println("I am a connected client"); 

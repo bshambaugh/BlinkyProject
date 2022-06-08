@@ -19,35 +19,31 @@ require('dns').lookup(require('os').hostname(), function (err, add, fam) {
 })
 
 websocketServer.on('stream',function(stream,request) {
- 
+ /*
    const payload = 'f958a'; 
    var interval = setInterval(function(){
-  /*
-   (async () => {
-    console.log(await writer(stream,payload))
-   })()
-   */
+
    writer(stream,payload).then(data => {
     console.log('the data is',data);
    });
   }, 2000);
- 
+ */
+  body(stream);
 })
 
-async function writer(stream,payload) {
+async function body(stream) {
     stream.setEncoding('utf8');
+    /*
     let data = '';
-    let string = '1'+'1200'+payload;
+    let string = '2'+'1200'+payload;
     stream.write(string,() => console.log('I am a penguin'));  
+    */
     stream.on('data',(chunk) => {
       console.log('the chunk is',chunk);
       console.log(`Received ${chunk.length} bytes of data.`);
-      data = chunk.toString();
-      //data += chunk;  // see: https://nodesource.com/blog/understanding-streams-in-nodejs/
-      // I am not sure how to store the chunk of data from the stream to a variable .. data has no value
-      //chunk = '';
+   //   data = chunk.toString();
     })
-    return data;
+  //  return data;
 }
 
 /*
