@@ -20,3 +20,12 @@ void parse_packet(const string *source, string *type, string *curve, string *pay
   *curve = (*source).substr(1,4);
   *payload = (*source).substr(5,(*source).length()-1);
 }
+
+bool compareString(string s1, string s2)
+{
+      if(s1.compare(s2) == 0) {
+           return true;
+      } else {
+           return false;
+      }
+}

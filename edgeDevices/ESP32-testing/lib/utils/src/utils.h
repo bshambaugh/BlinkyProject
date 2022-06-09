@@ -10,4 +10,6 @@ using namespace std;
 bool char_sequence_compare(char a[],char b[]);
 
 // the packet should only be parsed if the first character is 0, 1, or 2...the character length should be greater than or equal to two
-void parse_packet(const string *source, string *type, string *curve, string *payload) 
+void parse_packet(const string *source, string *type, string *curve, string *payload);
+
+bool compareString(string s1, string s2);
