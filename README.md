@@ -5,6 +5,8 @@ In another use case a teacher is teaching a training class and wants to give pup
 
 In another use case someone thinks it would be great to have augmented reality where the holder of an NFT is able to unlock gates, grab an electronically enabled unicorn plush toy from the stuffed animal vendor, or who knows...
 
+Perhaps using this underlying tech, referred to some as a protocol development, in a real world scavenger hunt adventure game could be interesting. By combining verifiable credentials, OCAPs (like UCAN that allow for off network) and embeedded devices motors, lights, sensors, etc could be activated based on a players progression in the game.
+
 Ramblings ...
 "People are good at verifying digital credentials with computers and cell phones, but not so much if you want to open a gate or do it over a low bandwidth extended network.
 Brent Shambaugh  10 minutes ago
