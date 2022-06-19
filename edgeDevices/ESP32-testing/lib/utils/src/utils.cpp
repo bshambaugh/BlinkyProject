@@ -1,6 +1,6 @@
 #include "utils.h"
 
-bool char_sequence_compare(char a[],char b[]){
+bool char_sequence_compare(const char a[],const char b[]){
     if(strlen(a) > strlen(b)) {
       for(int i=0;a[i]!='\0';i++){
          if(a[i]!=b[i])
@@ -29,3 +29,4 @@ bool compareString(string s1, string s2)
            return false;
       }
 }
+

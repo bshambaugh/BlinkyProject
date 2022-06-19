@@ -22,23 +22,34 @@ websocketServer.on('stream',function(stream,request) {
    //stream.read();
    stream.setEncoding('utf8');
 
-   const string = '2'+'1200'+'f958a'; 
-   var interval = setInterval(function(){
-    stream.write(string, () => console.log('I am a penguin' ));
-   // writer(stream,string);
-  }, 2000);
- 
-  let result = '';
-   // stream.write('hello');
-   stream.on('data', (chunk) => {
-    // this buffer gets overflowed... (the signature keeps getting longer and longer)
-    console.log(`Received ${chunk.length} bytes of data.`);
-    //result = chunk;
-    console.log(chunk);
-  });
-  //console.log('the result is:',result);  
-   console.log('something is going on');
 })
+
+async function getSignature(stream,payload) {
+  let data = '2'+'1200'+payload;  // this is parsed to type+signature+payload when it gets to the ESP32
+  stream.write(data);
+  /*
+  let data = '2'+'1200'+payload;  // this is parsed to type+signature+payload when it gets to the ESP32
+  stream.write(data); // make sure they payload is sha256 hashed to make sure it isn't to much for the signer & network
+  return new Promise((resolve,reject) => {
+     stream.once('data',(resolve) => {
+        // do code to take the resolve to make it a Base64URL
+         return resolve;
+    });
+    stream.once('error',reject); // I threw this in for errors, it may not be correct. I saw it here: https://www.derpturkey.com/event-emitter-to-promise/
+  }
+  */
+}
+
+
+
+/*
+function P256Signer(): Signer {    // signer like ed25519, secp256k1 signer in did-jwt
+  return async(payload: string | Uint8Array): Promise<string> => {
+        return await getSignature(payload);
+  }
+}
+*/
+
 
 /*
 function writer(stream,string) {

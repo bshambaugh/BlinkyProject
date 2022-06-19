@@ -5,6 +5,7 @@
 #include <Wire.h>
 #include <concatenateArray.h>
 #include <protected.h>
+//#include "utils.h"
 
 #define BUFFER_SIZE                                 30 // Define the payload size here
 
@@ -35,7 +36,8 @@ char signatureString[129];
 char publicKeyString[129];
 //uint8_t message[32];
 uint8_t bufferString[64];
-//unsigned char bufferString[64];
+//char bufferString[64];
+// unsigned char bufferString[64];
 
 bool start = true;
 
@@ -131,40 +133,39 @@ void printInfo()
 // Modified https://stackoverflow.com/questions/15050766/comparing-the-values-of-char-arrays-in-c#15050807
 // compares two character arrays to see if they have the same sequence of characters
 // I might need to modify this to return a pointer or something...
-int compare(char a[],char b[]){
+bool char_sequence_compare(const char a[],const char b[]){
     if(strlen(a) > strlen(b)) {
       for(int i=0;a[i]!='\0';i++){
          if(a[i]!=b[i])
-             return 0;
+             return false;
       }
     } else {
        for(int i=0;b[i]!='\0';i++){
          if(a[i]!=b[i])
-             return 0;
+             return false;
        }
     }
-    return 1;
+    return true;
 }
 
 // verify that the public key matches the key:did you think it is
 // this should take the payload as an argument
-bool verifyKeyDID(char *payload) {
-   Serial.println("my payload is;");
-   Serial.println(payload);
+bool verifyKeyDID(const String payload) {
+   // somehow payload which is a string needs to be converted to a char array
+   const char* payload_str = payload.c_str();
    voidArray(129,publicKeyString);
    mergeArray(64,atecc.publicKey64Bytes,publicKeyString);
    Serial.println("my public key string is");
    Serial.println(publicKeyString);
-   if(compare(payload,publicKeyString)) {
+   if(char_sequence_compare(payload_str,publicKeyString)) {
     return true;
    } else {
     return false;
-   }
+  }
    // if the payload matches the publicKeyString return true
    // else return false
    // this involves matching two char arrays (they may not be the same length, but they will have the same contents)
 }
-
 // getthepublicKey
 void websocketSendPublicKey() {
          Serial.println("Okay, I am getting the Public Key");
@@ -187,15 +188,10 @@ void websocketSendPublicKey() {
 }
 
 // gettheSignature
-void websocketGetSignature(char *payload) {
-         // get the data that you want to sign...(the RPC should be method with the argument of what you want to sign...)
-         Serial.println("The data that I have");
-         // rather than data, this should be payload
-         Serial.println(payload);
-         Serial.println("Okay, I am getting the signature");
-         // I need to convert from a char string to a String object (that way I can write dataGetByes...of convert the payload into a byte string some other way)
-         // data.getBytes(bufferString,64)
-         (String(*payload,strlen(payload))).getBytes(bufferString,64);  /// copies data characters into bufferString as a byteString that can be signed
+void websocketGetSignature(String payload) {
+         Serial.println("Okay, I am getting the Signature");
+         const char* payload_str = payload.c_str();
+         (String(*payload_str,strlen(payload_str))).getBytes(bufferString,64);  /// copies data characters into bufferString as a byteString that can be signed
          atecc.createSignature(bufferString);
          Serial.println(atecc.signature[63]);
          voidArray(129,signatureString);
@@ -212,86 +208,66 @@ void websocketGetSignature(char *payload) {
          
          voidArray(129,signatureString);
 
+         voidArray(BUFFER_SIZE,txpacket);
+
+         voidUint8Array(64,bufferString);
 }
 
-// the packet should only be parsed if the first character is 0, 1, or 2...the character length should be greater than or equal to two
-void parse_packet(char *source, char *type, char *curve, char *payload)
-{
-    int length, i;
-    int n=0, m =4;
-
-    char temp[5];
-
-    printf("the source is %s\n",source);
-
-    length = strlen(source);
-
-   for(i=0; i <= n; i++) {
-     memset(temp,'\0',sizeof(temp));
-     strncpy(temp,&source[i],1);
-     strcat(type,temp);
-   }
-
-   if(strncmp("0",type,1) == 0) {
-     for(i=n+1;i<=m;i++) {
-         memset(temp,'\0',sizeof(temp));
-         strncpy(temp,&source[i],1);
-         strcat(curve,temp);
-     }
-   } else {
-     m = 0;
-   }
-
-   if(length > m) {
-     for(i=m+1;i<=length;i++) {
-        memset(temp,'\0',sizeof(temp));
-        strncpy(temp,&source[i],1);
-        strcat(payload,temp);
-     }
-   }
-
-
+bool compareString(String s1, String s2)
+{  
+      if(s1.compareTo(s2) == 0) {
+           return true;
+      } else {
+           return false;
+      }
 }
 
-void RPC(String &data) {
-// check that packet has one the available prefixes (0,1,2,3), and the data has a type
-    if(((data.charAt(0) == '0') || (data.charAt(0) == '1') || (data.charAt(0) == '2') || (data.charAt(0) == '3')) && (data.length() >= 5)) {
+void parse_packet(const String *source, String *type, String *curve, String *payload) {
+  *type = (*source).substring(0,1);
+  *curve = (*source).substring(1,4);
+  *payload = (*source).substring(5,(*source).length()-1);
+}
 
-        parse_packet(&data[0],type,curve,payload);
+void RPC(String &source) {
+      String type = "";
+      String curve = "";
+      String payload = "";
+      if(((source.charAt(0) == '0') | (source.charAt(0) == '1') | (source.charAt(0) == '2') | (source.charAt(0) == '3')) && (source.length() >= 5)) {
+           parse_packet(&source,&type,&curve,&payload);
 
-        if (strncmp("0",type,1) == 0) {
-           Serial.println("Match Public Key to stored\n");
-           // some function that grabs the public key from the cryptochip and matches to what is sent
-           if(verifyKeyDID(payload)) {
-              Serial.println("You guessed my name");
-           } else {
-              Serial.println("You did not guess my name");
-           }
-        }
+           if(compareString("0",type)) {
+              Serial.println("Match Public Key to stored\n");
+              // some function that grabs the public key from the cryptochip and matches to what is sent
+              // actually verifyKeyDID should only take the hex string as an argument, AFAIK this function has not been battle tested
+              if(verifyKeyDID(payload)) {
+                Serial.println("You guessed my name");
+                // websocketsend 1
+                // construct a function to send back arbitary data over websockets, follow the pattern in websocketSendPublicKey and websocketGetSignature
+               } else {
+                Serial.println("You did not guess my name");
+                // websocketsend 0
+                // construct a function to send back arbitary data over websockets, follow the pattern in websocketSendPublicKey and websocketGetSignature
+              }
+            }
 
-        if (strncmp("1",type,1) == 0) {
-           Serial.println("I have a public Key\n");
-           websocketSendPublicKey();
-        }
+            if(compareString("1",type)) {
+                Serial.println("Here is the public key of my cryptographic co-processor\n");
+                websocketSendPublicKey();
+            }
 
-        if (strncmp("2",type,1) == 0) {
-          printf("I have a signature\n");
-          if  (strlen(payload) > 0) {
-             Serial.println("Sign the payload\n");
-              websocketGetSignature(payload);  // this needs to refactored to sign the payload
-          }
-        }
+            if(compareString("2",type)) {
+                 if(payload.length() > 0) {
+                     Serial.println("Sign the payload\n");
+                     websocketGetSignature(payload);  // this needs to refactored to sign the payload
+                 }
+            }
 
-        if (strncmp("3",type,1) == 0) {
-         Serial.println("I have a message\n");
-        }
-
-        voidArray(5,type);
-        voidArray(5,curve);
-        voidArray(200,payload);
-    } else {
-        Serial.println("Invalid packet");
-    }
+            if(compareString("3",type)) {
+                Serial.println("I have a message\n");
+            }
+      } else {
+          Serial.println("Invalid packet");
+      }
 }
 
 void setup() {

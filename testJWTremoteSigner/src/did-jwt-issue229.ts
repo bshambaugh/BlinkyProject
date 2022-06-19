@@ -3,7 +3,7 @@ import * as u8a from 'uint8arrays'
 import * as EC from 'elliptic'
 import * as http from 'http'
 //import * as WebSocket from 'ws'
-import WebSocketStream, * as WebSocket from 'websocket-stream'
+import * as WebSocket from 'websocket-stream'
 
 //import WebSocket, { createWebSocketStream, WebSocketServer } from 'ws';
 
@@ -19,38 +19,32 @@ require('dns').lookup(require('os').hostname(), function (err, add, fam) {
 })
 
 websocketServer.on('stream',function(stream,request) {
- 
-   const payload = 'f958a'; 
+   //stream.read();
+   stream.setEncoding('utf8');
+
+   const string = '2'+'1200'+'f958a'; 
    var interval = setInterval(function(){
-  /*
-   (async () => {
-    console.log(await writer(stream,payload))
-   })()
-   */
-   writer(stream,payload).then(data => {
-    console.log('the data is',data);
-   });
+    stream.write(string, () => console.log('I am a penguin' ));
+   // writer(stream,string);
   }, 2000);
  
+  let result = '';
+   // stream.write('hello');
+   stream.on('data', (chunk) => {
+    // this buffer gets overflowed... (the signature keeps getting longer and longer)
+    console.log(`Received ${chunk.length} bytes of data.`);
+    //result = chunk;
+    console.log(chunk);
+  });
+  //console.log('the result is:',result);  
+   console.log('something is going on');
 })
 
-async function writer(stream,payload) {
-    stream.setEncoding('utf8');
-    let data = '';
-    let string = '2'+'1200'+payload;
-    stream.write(string,() => console.log('I am a penguin'));  
-   // stream.once()
-    stream.on('data',(chunk) => {
-      console.log('the chunk is',chunk);
-      console.log(`Received ${chunk.length} bytes of data.`);
-      data = chunk.toString();
-      //data += chunk;  // see: https://nodesource.com/blog/understanding-streams-in-nodejs/
-      // I am not sure how to store the chunk of data from the stream to a variable .. data has no value
-      //chunk = '';
-    })
-    return data;
+/*
+function writer(stream,string) {
+    stream.write(string, () => console.log('I am a giraffe' ));
 }
-
+*/
 /*
 websocketServer.on('connection', function connection(ws) {
   const duplexWebSocketStream = WebSocket.createWebSocketStream(ws, { encoding: 'utf8' });
