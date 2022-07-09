@@ -19,7 +19,10 @@ import type {
 } from 'dids'
 import { RPCError, createHandler } from 'rpc-utils'
 import type { HandlerMethods, RPCRequest, RPCResponse, SendRequestFunc } from 'rpc-utils'
-import { encodeDIDfromHexString, compressedKeyInHexfromRaw } from 'did-key-creator'
+import { encodeDIDfromHexString, compressedKeyInHexfromRaw, didKeyURLtoPubKeyHex } from 'did-key-creator'
+import * as keydidresolver from '/home/ubuntu/Downloads/nov22nd/js-ceramic/packages/key-did-resolver/lib/index' 
+import { fromString } from 'uint8arrays/from-string'
+import { toString } from 'uint8arrays/to-string'
 
 //import WebSocket, { createWebSocketStream, WebSocketServer } from 'ws';
 
@@ -169,15 +172,35 @@ const didMethods: HandlerMethods<Context, DIDProviderMethods> = {
   },
 }
 //export class P256Provider 
+// is there something like an asyncchronous class so I can use asynchronous function calls in the constructor?
 export class P256Provider implements DIDProvider {
   _handle: SendRequestFunc<DIDProviderMethods>
 
-  constructor(stream) {
+  constructor(stream,did) {
+    // check that did is valid with RPC request with chip
+    // if there is no did (e.g. did:key the code should create the did:key from a public key of the cryptochip ... if there is no public key...fail gracefully)
+    /*
     const multicodecName = 'p256-pub';
+    */
     // this raw public key may be stored somewhere, but initially it needs to be pulled over the wire from the cryptochip ... see remotePublicKey.ts
+    /*
     const rawPublicKey = 'f9c36f8964623378bdc068d4bce07ed17c8fa486f9ac0c2613ca3c8c306d7bb61cd36717b8ac5e4fea8ad23dc8d0783c2318ee4ad7a80db6e0026ad0b072a24f';
     const compressedKey = compressedKeyInHexfromRaw(rawPublicKey);
     const did = encodeDIDfromHexString(multicodecName ,compressedKey);
+    */
+   // I don't know how async function calls will work with conditionals and the constructor
+/*     
+  if(matchDIDKeyWithRemote() === true) {
+       did = did;
+     } else {
+       const multicodecName = 'p256-pub';
+           try {
+        did = encodeDIDfromHexString(multicodecName,compressedKeyInHexfromRaw(getPublicKey()));
+    } catch (ex) {
+        console.log("async failed with", ex);
+    }
+  }
+*/  
     const handler = createHandler<Context, DIDProviderMethods>(didMethods)
     // this code has to check whether the did is valid for the remote ... but does the logic have to be here??
     this._handle = async (msg) => await handler({ did, stream }, msg)
@@ -192,4 +215,45 @@ export class P256Provider implements DIDProvider {
   ): Promise<RPCResponse<DIDProviderMethods, Name> | null> {
     return await this._handle(msg)
   }
+}
+
+async function matchDIDKeyWithRemote(didkeyURL: string,stream: any) : Promise<boolean> {
+  const compressedPublicKey = didKeyURLtoPubKeyHex(didkeyURL);
+  const publicKey = keydidresolver.nist_weierstrass_common.publicKeyIntToUint8ArrayPointPair(keydidresolver.secp256r1.ECPointDecompress(fromString(compressedPublicKey,'base16'))); // actually I need to create a function called compressed to raw
+  // octetToRaw == 
+  /*
+  interface octetPoint {
+    xOctet: Uint8Array,
+    yOctet: Uint8Array
+  }
+  */ 
+  // (xOctet --> hexString) + (yOctect --> hexString) -- u8a.toString
+  //const publicKey = octetToRaw(publicKeyIntToUint8ArrayPointPair(ECPointDecompress(fromString(compressedPublicKey,'base16'))));
+  //const publicKey = // compressedToRaw(compressedPublicKey) function that converts a compressed key to a raw key
+  const publicRawKey = octetToRaw(publicKey)
+  return await matchPublicKeyWithRemote(publicRawKey,stream)
+}
+
+async function matchPublicKeyWithRemote(publicKey: string,stream: any) : Promise<boolean> {
+  let rpcPayload = '0'+'1200'+publicKey;
+  stream.write(rpcPayload);
+  let result = await waitForEvent(stream,'data');
+  // I am not sure what the return packet will look like, but it may be a 0 or 1...
+  if (result === '1') {
+      return true;
+   } else {
+      return false;
+  }
+}
+
+function octetToRaw(publicKey: keydidresolver.octetPoint) {
+   return toString(publicKey.xOctet,'hex')+toString(publicKey.yOctet,'hex')
+}
+
+async function getPublicKey(stream) : Promise<string> {
+  /// look at the RPC call to get the public key
+  let rpcPayload = '2'+'1200';
+  stream.write(rpcPayload);
+  let result = await waitForEvent(stream,'data');
+  return result;
 }
