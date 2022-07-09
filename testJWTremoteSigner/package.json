@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "did-jwt": "^6.0.0",
+    "did-key-creator": "^0.2.4", 
     "elliptic": "^6.5.4",
     "jest": "^28.1.0",
     "ts-jest": "^28.0.2",
