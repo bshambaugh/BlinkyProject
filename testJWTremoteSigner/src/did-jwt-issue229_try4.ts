@@ -206,6 +206,30 @@ export class P256Provider implements DIDProvider {
     this._handle = async (msg) => await handler({ did, stream }, msg)
   }
 
+  public static async build(stream,did): Promise<P256Provider> {
+
+    // I don't know how to use these in the code below, because both remain promises
+    // maybe I should use promise chaining with conditionals .... then wrap it all with await
+    /*    const myClassInstance = await MyClass.build()
+    * return myClassInstance;
+    */
+
+    const DIDKeyExists = (async function() { return await matchDIDKeyWithRemote(did,stream) })();
+    const publicKey = (async function() { return await getPublicKey(stream) })();
+
+    if( DIDKeyExists === true) {   
+      did = did;
+      } else {
+         const multicodecName = 'p256-pub';
+        try {
+              did = encodeDIDfromHexString(multicodecName,compressedKeyInHexfromRaw(publicKey));
+        } catch (ex) {
+              console.log("async failed with", ex);
+    }
+   }
+    return new P256Provider(stream,did);
+  }
+
   get isDidProvider(): boolean {
     return true
   }
