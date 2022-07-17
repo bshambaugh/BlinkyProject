@@ -166,6 +166,15 @@ bool verifyKeyDID(const String payload) {
    // else return false
    // this involves matching two char arrays (they may not be the same length, but they will have the same contents)
 }
+
+// what happens when the payload is larger than the BUFFER_SIZE ??
+void sendStringoverWebSocket(char *payload) {
+   sprintf(txpacket+strlen(txpacket),"%s",payload);
+   webSocketClient.sendData(txpacket);
+   voidArray(BUFFER_SIZE,txpacket);
+}
+
+// refactor this with sendStringoverWebSocket
 // getthepublicKey
 void websocketSendPublicKey() {
          Serial.println("Okay, I am getting the Public Key");
@@ -187,6 +196,7 @@ void websocketSendPublicKey() {
          voidArray(BUFFER_SIZE,txpacket);
 }
 
+// refactor this with sendStringoverWebSocket
 // gettheSignature
 void websocketGetSignature(String payload) {
          Serial.println("Okay, I am getting the Signature");
@@ -242,10 +252,12 @@ void RPC(String &source) {
               if(verifyKeyDID(payload)) {
                 Serial.println("You guessed my name");
                 // websocketsend 1
+                sendStringoverWebSocket("1"); // check to see if this works
                 // construct a function to send back arbitary data over websockets, follow the pattern in websocketSendPublicKey and websocketGetSignature
                } else {
                 Serial.println("You did not guess my name");
                 // websocketsend 0
+                sendStringoverWebSocket("0"); // check to see if this works
                 // construct a function to send back arbitary data over websockets, follow the pattern in websocketSendPublicKey and websocketGetSignature
               }
             }

@@ -20,7 +20,7 @@ import type {
 import { RPCError, createHandler } from 'rpc-utils'
 import type { HandlerMethods, RPCRequest, RPCResponse, SendRequestFunc } from 'rpc-utils'
 import { encodeDIDfromHexString, compressedKeyInHexfromRaw, didKeyURLtoPubKeyHex } from 'did-key-creator'
-import * as keydidresolver from '/home/ubuntu/Downloads/nov22nd/js-ceramic/packages/key-did-resolver/lib/index' 
+import * as keydidresolver from '/home/ubuntu/Downloads/nov22nd/js-ceramic/packages/key-did-resolver/lib/index.js'  // I cannot import this ...
 import { fromString } from 'uint8arrays/from-string'
 import { toString } from 'uint8arrays/to-string'
 
@@ -206,6 +206,7 @@ export class P256Provider implements DIDProvider {
     this._handle = async (msg) => await handler({ did, stream }, msg)
   }
 
+  
   public static async build(stream,did): Promise<P256Provider> {
 
     // I don't know how to use these in the code below, because both remain promises
@@ -214,9 +215,26 @@ export class P256Provider implements DIDProvider {
     * return myClassInstance;
     */
 
-    const DIDKeyExists = (async function() { return await matchDIDKeyWithRemote(did,stream) })();
-    const publicKey = (async function() { return await getPublicKey(stream) })();
+    const DIDKeyExists = (async function() { return await matchDIDKeyWithRemote(did,stream) })(); /// returns 1 if exists, 0 if not ?
+    const publicKey = (async function() { return await getPublicKey(stream) })(); // gets the public key
 
+    DIDKeyExists.then(function(result) { if(result == true){
+      did = did;
+     } else { 
+       const multicodecName = 'p256-pub';
+       try {
+         publicKey.then(function(resultTwo){ did = encodeDIDfromHexString(multicodecName,compressedKeyInHexfromRaw(resultTwo)); })
+       } catch (ex) {
+         console.log("async failed with", ex)
+       }
+     }
+     
+    })
+ 
+    return new P256Provider(stream,did);
+
+  }
+/*
     if( DIDKeyExists === true) {   
       did = did;
       } else {
@@ -229,6 +247,7 @@ export class P256Provider implements DIDProvider {
    }
     return new P256Provider(stream,did);
   }
+  */
 
   get isDidProvider(): boolean {
     return true
