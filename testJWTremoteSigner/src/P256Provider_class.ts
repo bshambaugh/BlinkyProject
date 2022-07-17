@@ -371,7 +371,7 @@ export class P256Provider implements DIDProvider {
       const DIDKeyExists = (async function() { return await matchDIDKeyWithRemote(did,stream) })(); /// returns 1 if exists, 0 if not ?
       const publicKey = (async function() { return await getPublicKey(stream) })(); // gets the public key
   
-      DIDKeyExists.then(function(result) { if(result == true){
+      DIDKeyExists.then(function(result) { if(result === "1"){
         did = did;
        } else { 
          const multicodecName = 'p256-pub';
