@@ -27,8 +27,9 @@
     "clean": "rm -rf ./lib"
   },
   "dependencies": {
+    "@ceramicnetwork/key-did-resolver": "^0.2.2",
     "did-jwt": "^6.0.0",
-    "did-key-creator": "^0.3.2", 
+    "did-key-creator": "^0.3.2",
     "elliptic": "^6.5.4",
     "jest": "^28.1.0",
     "ts-jest": "^28.0.2",

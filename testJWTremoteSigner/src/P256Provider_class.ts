@@ -18,17 +18,41 @@ import * as u8a from 'uint8arrays'
 import * as http from 'http'
 import * as WebSocket from 'websocket-stream'
 
+import KeyResolver from '@ceramicnetwork/key-did-resolver'
+import { DID } from 'dids'
+
 const server = http.createServer();
 const websocketServer = new WebSocket.Server({ server });
 
+require('dns').lookup(require('os').hostname(), function (err, add, fam) {
+  console.log('addr: '+add);
+})
 
 websocketServer.on('stream',function(stream,request) {
     //stream.read();
     stream.setEncoding('utf8');
 const did = 'did:key:zDnaerx9CtbPJ1q36T5Ln5wYt3MQYeGRG5ehnPAmxcf5mDZpv';
+/*
 const provider = P256Provider.build(stream,did);
+console.log(provider);
+*/
+setInterval(function(){
+  (async function() {
+    
+    const provider = P256Provider.build(stream,did);
+    console.log(provider);
+   // Creating the DID class doesn't work well with a promise, commenting out for now...
+    /*
+    const resolvedProvider = (await provider).send
+    console.log(resolvedProvider) // I tried putting resolvedProvider in the place of provider, but I don't know how to fix the send requirement.
+    const didObject = new DID({ provider , resolver: KeyResolver.getResolver() })
+    */
+  })();
+},250);
+
 })
 
+server.listen(3000);
 
 /**
   * Elliptic curve point with coordinates expressed as byte arrays (Uint8Array)
@@ -371,7 +395,7 @@ export class P256Provider implements DIDProvider {
       const DIDKeyExists = (async function() { return await matchDIDKeyWithRemote(did,stream) })(); /// returns 1 if exists, 0 if not ?
       const publicKey = (async function() { return await getPublicKey(stream) })(); // gets the public key
   
-      DIDKeyExists.then(function(result) { if(result === "1"){
+      DIDKeyExists.then(function(result) { if(result === true){
         did = did;
        } else { 
          const multicodecName = 'p256-pub';
