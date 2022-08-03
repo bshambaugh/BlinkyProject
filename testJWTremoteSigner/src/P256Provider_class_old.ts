@@ -32,7 +32,6 @@ websocketServer.on('stream',function(stream,request) {
     //stream.read();
     stream.setEncoding('utf8');
 const did = 'did:key:zDnaerx9CtbPJ1q36T5Ln5wYt3MQYeGRG5ehnPAmxcf5mDZpv';
-// const did = 'did:key:zDnaezUFn4zmNoNeZvBEdVyCv6MVL69X8NRD8YavTCJWGuXM7';
 /*
 const provider = P256Provider.build(stream,did);
 console.log(provider);
@@ -393,49 +392,9 @@ export class P256Provider implements DIDProvider {
     
     public static async build(stream,did): Promise<P256Provider> {
    
-      //const DIDKeyExists = (async function() { return await matchDIDKeyWithRemote(did,stream) })(); /// returns 1 if exists, 0 if not ?
-     // const DIDKeyExists = await matchDIDKeyWithRemote(did,stream);  // make sure this logically works (test it alone)
-      //const publicKey = (async function() { return await getPublicKey(stream) })(); // gets the public key
-     // const publicKey = await getPublicKey(stream);  // this does not work...  (test this alone)
-
-      //console.log('DIDKeyExists is:');
-     // console.log(DIDKeyExists);
-
-      /*
-      if(DIDKeyExists === true) {
-         did = did;
-         console.log('the did exists:');
-         console.log(did);
-      } else {
-        const multicodecName = 'p256-pub';
-       // const publicKey = await getPublicKey(stream);  // this does not work...  (test this alone)
-        const did = await getPublicKey(stream).then(function(publicKey){ return encodeDIDfromHexString(multicodecName,compressedKeyInHexfromRaw(publicKey)); })
-       /*
-        console.log('the public key is:');
-        console.log(publicKey);
-        did = encodeDIDfromHexString(multicodecName,compressedKeyInHexfromRaw(publicKey));
-       */ 
-      /*
-        console.log('the did does not exist:');
-        console.log(did);
-      }
-      */
-
-      // refactor this code. give back the public key if the did:key does not exist. If the did:key does exist give back a 1.
-
-      matchDIDKeyWithRemote(did,stream).then(function(result){
-        if(result === true) {
-          did = did;
-          console.log('the did is real');
-          console.log(did);
-        } else {
-          const multicodecName = 'p256-pub';
-          console.log('the did is not real');
-          getPublicKey(stream).then(function(resultTwo){ did = encodeDIDfromHexString(multicodecName,compressedKeyInHexfromRaw(resultTwo)); })
-          console.log(did);
-        }
-      })
-      /*
+      const DIDKeyExists = (async function() { return await matchDIDKeyWithRemote(did,stream) })(); /// returns 1 if exists, 0 if not ?
+      const publicKey = (async function() { return await getPublicKey(stream) })(); // gets the public key
+  
       DIDKeyExists.then(function(result) { if(result === true){
         did = did;
        } else { 
@@ -448,7 +407,6 @@ export class P256Provider implements DIDProvider {
        }
        
       })
-      */
    
       return new P256Provider(stream,did);
   
@@ -490,10 +448,8 @@ export class P256Provider implements DIDProvider {
   
   async function getPublicKey(stream) : Promise<string> {
     /// look at the RPC call to get the public key
-    let rpcPayload = '1'+'1200';
+    let rpcPayload = '2'+'1200';
     stream.write(rpcPayload);
-    let preResult = await waitForEvent(stream,'data');
-    console.log(preResult);
-    let result = preResult.split(',');
-    return result[1];
+    let result = await waitForEvent(stream,'data');
+    return result;
   }

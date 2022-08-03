@@ -185,7 +185,7 @@ void websocketSendPublicKey() {
          sprintf(txpacket+strlen(txpacket),"%s","publicKey"); // add another thing (by bret)
          sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
          sprintf(txpacket+strlen(txpacket),"%s",publicKeyString); // add another thing (by bret)
-         sprintf(txpacket+strlen(txpacket),"%s","\n"); // add another thing (by bret)
+        // sprintf(txpacket+strlen(txpacket),"%s","\n"); // add another thing (by bret)
     
          Serial.println(txpacket); 
 
@@ -210,7 +210,7 @@ void websocketGetSignature(String payload) {
          sprintf(txpacket+strlen(txpacket),"%s","signature"); // add another thing (by bret)
          sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
          sprintf(txpacket+strlen(txpacket),"%s",signatureString); // add another thing (by bret)
-         sprintf(txpacket+strlen(txpacket),"%s","\n"); // add another thing (by bret)
+       //  sprintf(txpacket+strlen(txpacket),"%s","\n"); // add another thing (by bret)
     
          Serial.println(txpacket); 
 
@@ -234,8 +234,10 @@ bool compareString(String s1, String s2)
 
 void parse_packet(const String *source, String *type, String *curve, String *payload) {
   *type = (*source).substring(0,1);
-  *curve = (*source).substring(1,4);
-  *payload = (*source).substring(5,(*source).length()-1);
+ // *curve = (*source).substring(1,4);
+  *curve = (*source).substring(1,5);
+  //*payload = (*source).substring(5,(*source).length()-1);
+  *payload = (*source).substring(5,(*source).length());
 }
 
 void RPC(String &source) {
@@ -249,6 +251,12 @@ void RPC(String &source) {
               Serial.println("Match Public Key to stored\n");
               // some function that grabs the public key from the cryptochip and matches to what is sent
               // actually verifyKeyDID should only take the hex string as an argument, AFAIK this function has not been battle tested
+              Serial.println("The type is:");
+              Serial.println(type);
+              Serial.println("The curve is:");
+              Serial.println(curve);
+              Serial.println("The payload is:");
+              Serial.println(payload);
               if(verifyKeyDID(payload)) {
                 Serial.println("You guessed my name");
                 // websocketsend 1
@@ -257,7 +265,8 @@ void RPC(String &source) {
                } else {
                 Serial.println("You did not guess my name");
                 // websocketsend 0
-                sendStringoverWebSocket("0"); // check to see if this works
+                // sendStringoverWebSocket("0"); // check to see if this works
+                websocketSendPublicKey();
                 // construct a function to send back arbitary data over websockets, follow the pattern in websocketSendPublicKey and websocketGetSignature
               }
             }

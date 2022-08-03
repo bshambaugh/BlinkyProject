@@ -16,7 +16,7 @@
        "./types", "node_modules/@types"
      ],
      "outDir":"lib",
-     "rootDir":"src"
+     "rootDir":"src",
   },
   "include": [
     "./src/**/*"

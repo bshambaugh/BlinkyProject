@@ -1,5 +1,5 @@
 {
     "extends": "./tsconfig.json",
-    "include": ["src/declarations.d.ts", "test"]
+    "include": ["src/declarations.d.ts", "test"],
 }
   
