@@ -37,6 +37,7 @@ const did = 'did:key:zDnaerx9CtbPJ1q36T5Ln5wYt3MQYeGRG5ehnPAmxcf5mDZpv';
 const provider = P256Provider.build(stream,did);
 console.log(provider);
 */
+
 setInterval(function(){
   (async function() {
     
@@ -47,6 +48,11 @@ setInterval(function(){
     // const resolvedProvider = (await provider).send
     //console.log(resolvedProvider) // I tried putting resolvedProvider in the place of provider, but I don't know how to fix the send requirement.
     const didObject = new DID({ provider , resolver: KeyResolver.getResolver() })
+    const auth = await didObject.authenticate()
+    console.log('auth is');
+    console.log(auth);
+
+    // use the didObject in your standard ceramic things
     
   })();
 },250);
@@ -423,6 +429,7 @@ export class P256Provider implements DIDProvider {
 
       // refactor this code. give back the public key if the did:key does not exist. If the did:key does exist give back a 1.
 
+      /*
       matchDIDKeyWithRemote(did,stream).then(function(result){
         if(result === true) {
           did = did;
@@ -435,6 +442,12 @@ export class P256Provider implements DIDProvider {
           console.log(did);
         }
       })
+      */
+
+      const newDID = await matchDIDKeyWithRemote(did,stream);
+      did = newDID;
+
+      // instead whatever DIDKeyExists from P256Provider_class_DIDKeyExists_newy2.ts is the did key
       /*
       DIDKeyExists.then(function(result) { if(result === true){
         did = did;
@@ -465,6 +478,7 @@ export class P256Provider implements DIDProvider {
     }
   }
 
+  /*
   async function matchDIDKeyWithRemote(didkeyURL: string,stream: any) : Promise<boolean> {
     const compressedPublicKey = didKeyURLtoPubKeyHex(didkeyURL);
     const publicKey = publicKeyIntToUint8ArrayPointPair(ECPointDecompress(fromString(compressedPublicKey,'base16'))); // actually I need to create a function called compressed to raw
@@ -487,7 +501,46 @@ export class P256Provider implements DIDProvider {
   function octetToRaw(publicKey: octetPoint) {
      return toString(publicKey.xOctet,'hex')+toString(publicKey.yOctet,'hex')
   }
+  */
   
+  
+
+   async function matchDIDKeyWithRemote(didkeyURL: string,stream: any) : Promise<string> {
+    const compressedPublicKey = didKeyURLtoPubKeyHex(didkeyURL);
+   // console.log(compressedPublicKey);
+    const publicKey = publicKeyIntToUint8ArrayPointPair(ECPointDecompress(fromString(compressedPublicKey,'hex'))); // actually I need to create a function called compressed to raw
+   // console.log(publicKey);
+    const publicRawKey = octetToRaw(publicKey)
+   // console.log(publicRawKey);
+    let result = await matchPublicKeyWithRemote(publicRawKey,stream)
+    if(result.length > 1) {
+      return rpcToDID(result);
+     } else {
+       return didkeyURL;
+     }
+  }
+  
+  async function matchPublicKeyWithRemote(publicKey: string,stream: any) : Promise<string> {
+    let rpcPayload = '0'+'1200'+publicKey;
+    stream.write(rpcPayload);
+   // console.log('rpcpaylod'+rpcPayload);
+    let result = await waitForEvent(stream,'data');  
+   // console.log('result is:'+result);
+    return result; 
+  }
+  
+  function octetToRaw(publicKey: octetPoint) {
+     return toString(publicKey.xOctet,'hex')+toString(publicKey.yOctet,'hex')
+  }
+  
+  function rpcToDID(response) : string {
+    let result = response.split(',');
+    //compressedKeyInHexfromRaw(result[1])
+    // return result[1];
+    const multicodecName = 'p256-pub';
+    return encodeDIDfromHexString(multicodecName,compressedKeyInHexfromRaw(result[1]))
+}
+
   async function getPublicKey(stream) : Promise<string> {
     /// look at the RPC call to get the public key
     let rpcPayload = '1'+'1200';
