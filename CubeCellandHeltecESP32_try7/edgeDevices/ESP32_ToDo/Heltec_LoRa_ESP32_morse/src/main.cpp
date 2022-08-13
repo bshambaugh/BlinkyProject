@@ -88,7 +88,7 @@ void setup() {
 
 void loop()
 {
-
+        buttonState = digitalRead(buttonPin);
         Serial.println(buttonState);
           // check if the pushbutton is pressed.
         // if it is, the buttonState is HIGH
@@ -98,12 +98,12 @@ void loop()
             digitalWrite(ledPin, HIGH);
 
              sprintf(txpacket,"%s","1");  //start a package
-	
-	          // turnOnRGB(COLOR_SEND,0); //change rgb color
+  
+            // turnOnRGB(COLOR_SEND,0); //change rgb color
 
-    	      Serial.printf("\r\nsending packet\r\n");
+            Serial.printf("\r\nsending packet\r\n");
 
-    	      Radio.Send( (uint8_t *)txpacket, strlen(txpacket) ); //send the package out	
+            Radio.Send( (uint8_t *)txpacket, strlen(txpacket) ); //send the package out 
 
         } else {
          // turn LED off
