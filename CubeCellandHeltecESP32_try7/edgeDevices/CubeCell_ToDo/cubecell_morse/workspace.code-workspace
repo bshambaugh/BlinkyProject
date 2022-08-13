@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../../Downloads/BlinkyProject/CubeCellandHeltecESP32_try7/edgeDevices/CubeCell_ToDo"
+		},
+		{
+			"name": "cubecell_morse",
+			"path": "."
+		}
+	],
+	"settings": {}
+}
