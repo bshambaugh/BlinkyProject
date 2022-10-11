@@ -20,7 +20,9 @@ import type {
 import { RPCError, createHandler } from 'rpc-utils'
 import type { HandlerMethods, RPCRequest, RPCResponse, SendRequestFunc } from 'rpc-utils'
 import { encodeDIDfromHexString, compressedKeyInHexfromRaw, didKeyURLtoPubKeyHex } from 'did-key-creator'
-import * as keydidresolver from '/home/ubuntu/Downloads/nov22nd/js-ceramic/packages/key-did-resolver/lib/index.js'  // I cannot import this ...
+//import * as keydidresolver from '/home/ubuntu/Downloads/nov22nd/js-ceramic/packages/key-did-resolver/lib/index.js'  // I cannot import this ...
+import * as nist_weierstrass from 'nist-weierstrauss'
+import {octetPoint} from 'nist-weierstrauss'
 import { fromString } from 'uint8arrays/from-string'
 import { toString } from 'uint8arrays/to-string'
 
@@ -262,7 +264,8 @@ export class P256Provider implements DIDProvider {
 
 async function matchDIDKeyWithRemote(didkeyURL: string,stream: any) : Promise<boolean> {
   const compressedPublicKey = didKeyURLtoPubKeyHex(didkeyURL);
-  const publicKey = keydidresolver.nist_weierstrass_common.publicKeyIntToUint8ArrayPointPair(keydidresolver.secp256r1.ECPointDecompress(fromString(compressedPublicKey,'base16'))); // actually I need to create a function called compressed to raw
+  //const publicKey = keydidresolver.nist_weierstrass_common.publicKeyIntToUint8ArrayPointPair(keydidresolver.secp256r1.ECPointDecompress(fromString(compressedPublicKey,'base16'))); // actually I need to create a function called compressed to raw
+  const publicKey = nist_weierstrass.nist_weierstrauss_common.publicKeyIntToUint8ArrayPointPair(nist_weierstrass.secp256r1.ECPointDecompress(fromString(compressedPublicKey,'base16')))
   // octetToRaw == 
   /*
   interface octetPoint {
@@ -289,9 +292,14 @@ async function matchPublicKeyWithRemote(publicKey: string,stream: any) : Promise
   }
 }
 
+function octetToRaw(publicKey: octetPoint) {
+  return toString(publicKey.xOctet,'hex')+toString(publicKey.yOctet,'hex')
+}
+/*
 function octetToRaw(publicKey: keydidresolver.octetPoint) {
    return toString(publicKey.xOctet,'hex')+toString(publicKey.yOctet,'hex')
 }
+*/
 
 async function getPublicKey(stream) : Promise<string> {
   /// look at the RPC call to get the public key

@@ -17,6 +17,8 @@ import { toString } from 'uint8arrays/to-string'
 import * as u8a from 'uint8arrays'
 import * as http from 'http'
 import * as WebSocket from 'websocket-stream'
+import * as nist_weierstrauss from 'nist-weierstrauss'
+import {octetPoint} from 'nist-weierstrauss'
 
 import { getResolver } from 'key-did-resolver'
 // import KeyResolver from '@ceramicnetwork/key-did-resolver'
@@ -33,10 +35,12 @@ websocketServer.on('stream',function(stream,request) {
     //stream.read();
     stream.setEncoding('utf8');
 const did = 'did:key:zDnaerx9CtbPJ1q36T5Ln5wYt3MQYeGRG5ehnPAmxcf5mDZpv';
+// const did = 'did:key:zDnaezUFn4zmNoNeZvBEdVyCv6MVL69X8NRD8YavTCJWGuXM7';
 /*
 const provider = P256Provider.build(stream,did);
 console.log(provider);
 */
+
 setInterval(function(){
   (async function() {
     
@@ -48,6 +52,11 @@ setInterval(function(){
     //console.log(resolvedProvider) // I tried putting resolvedProvider in the place of provider, but I don't know how to fix the send requirement.
     const didObject = new DID({ provider , resolver: getResolver() })
     // const didObject = new DID({ provider , resolver: KeyResolver.getResolver() })
+    const auth = await didObject.authenticate()
+    console.log('auth is');
+    console.log(auth);
+
+    // use the didObject in your standard ceramic things
     
   })();
 },250);
@@ -59,20 +68,23 @@ server.listen(3000);
 /**
   * Elliptic curve point with coordinates expressed as byte arrays (Uint8Array)
   */
+ /*
  interface octetPoint {
     xOctet: Uint8Array,
     yOctet: Uint8Array
   }
-
+*/
   /**
   * x,y point as a BigInt (requires at least ES2020)
   * For BigInt see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt
   */
+ /*
 interface BigIntPoint {
     x: BigInt,
     y : BigInt
  }
-
+*/
+ //nist_weierstrauss.nist_weierstrauss_common.publicKeyIntToUint8ArrayPointPair
 /**
  * 
  * @param ecpoint -  Public key.
@@ -82,6 +94,7 @@ interface BigIntPoint {
  * @throws Error: Input must have properties x and y
  * @throws TypeError: Input must be an object with properties x and y
  */
+/*
 export function publicKeyIntToUint8ArrayPointPair(ecpoint: BigIntPoint) : octetPoint {
     if(ecpoint == null) { throw new TypeError('input cannot be null or undefined.'); }
 
@@ -97,12 +110,14 @@ export function publicKeyIntToUint8ArrayPointPair(ecpoint: BigIntPoint) : octetP
       const yOctet = u8a.fromString(yHex,'base10');
       return { xOctet, yOctet };
 }
-
+*/
+//nist_weierstrauss.nist_weierstrauss_common.testUint8Array
 /**
  * Test to see if the argument is the Uint8Array
  * @param param
  * @returns
  */
+/*
  export function testUint8Array(param: Uint8Array) : boolean {
     if(param == null) {
        return false;
@@ -113,7 +128,8 @@ export function publicKeyIntToUint8ArrayPointPair(ecpoint: BigIntPoint) : octetP
        return false;
     }
   }
-
+*/
+//nist_weierstrauss.secp256r1.ECPointDecompress
 /**
  * Decompress a compressed public key in SEC format.
  * See section 2.3.3 in SEC 1 v2 : https://www.secg.org/sec1-v2.pdf.
@@ -123,6 +139,7 @@ export function publicKeyIntToUint8ArrayPointPair(ecpoint: BigIntPoint) : octetP
  * @param - 33 byte compressed public key. 1st byte: 0x02 for even or 0x03 for odd. Following 32 bytes: x coordinate expressed as big-endian.
  * @throws TypeError: input cannot be null or undefined.
  */
+/*
  export function ECPointDecompress( comp : Uint8Array ) : BigIntPoint {
     if(!testUint8Array(comp)) {
       throw new TypeError('input must be a Uint8Array');
@@ -153,7 +170,7 @@ export function publicKeyIntToUint8ArrayPointPair(ecpoint: BigIntPoint) : octetP
       };
   
   }
-
+*/
   /// Copy of `modPow` function from `https://github.com/juanelas/bigint-mod-arith`.
 /// The package is not quite ready to be used in production as ES module.
 /// See https://github.com/juanelas/bigint-mod-arith/pull/6
@@ -394,9 +411,56 @@ export class P256Provider implements DIDProvider {
     
     public static async build(stream,did): Promise<P256Provider> {
    
-      const DIDKeyExists = (async function() { return await matchDIDKeyWithRemote(did,stream) })(); /// returns 1 if exists, 0 if not ?
-      const publicKey = (async function() { return await getPublicKey(stream) })(); // gets the public key
-  
+      //const DIDKeyExists = (async function() { return await matchDIDKeyWithRemote(did,stream) })(); /// returns 1 if exists, 0 if not ?
+     // const DIDKeyExists = await matchDIDKeyWithRemote(did,stream);  // make sure this logically works (test it alone)
+      //const publicKey = (async function() { return await getPublicKey(stream) })(); // gets the public key
+     // const publicKey = await getPublicKey(stream);  // this does not work...  (test this alone)
+
+      //console.log('DIDKeyExists is:');
+     // console.log(DIDKeyExists);
+
+      /*
+      if(DIDKeyExists === true) {
+         did = did;
+         console.log('the did exists:');
+         console.log(did);
+      } else {
+        const multicodecName = 'p256-pub';
+       // const publicKey = await getPublicKey(stream);  // this does not work...  (test this alone)
+        const did = await getPublicKey(stream).then(function(publicKey){ return encodeDIDfromHexString(multicodecName,compressedKeyInHexfromRaw(publicKey)); })
+       /*
+        console.log('the public key is:');
+        console.log(publicKey);
+        did = encodeDIDfromHexString(multicodecName,compressedKeyInHexfromRaw(publicKey));
+       */ 
+      /*
+        console.log('the did does not exist:');
+        console.log(did);
+      }
+      */
+
+      // refactor this code. give back the public key if the did:key does not exist. If the did:key does exist give back a 1.
+
+      /*
+      matchDIDKeyWithRemote(did,stream).then(function(result){
+        if(result === true) {
+          did = did;
+          console.log('the did is real');
+          console.log(did);
+        } else {
+          const multicodecName = 'p256-pub';
+          console.log('the did is not real');
+          getPublicKey(stream).then(function(resultTwo){ did = encodeDIDfromHexString(multicodecName,compressedKeyInHexfromRaw(resultTwo)); })
+          console.log(did);
+        }
+      })
+      */
+
+      const newDID = await matchDIDKeyWithRemote(did,stream);
+      did = newDID;
+
+      // instead whatever DIDKeyExists from P256Provider_class_DIDKeyExists_newy2.ts is the did key
+      /*
       DIDKeyExists.then(function(result) { if(result === true){
         did = did;
        } else { 
@@ -409,6 +473,7 @@ export class P256Provider implements DIDProvider {
        }
        
       })
+      */
    
       return new P256Provider(stream,did);
   
@@ -425,6 +490,7 @@ export class P256Provider implements DIDProvider {
     }
   }
 
+  /*
   async function matchDIDKeyWithRemote(didkeyURL: string,stream: any) : Promise<boolean> {
     const compressedPublicKey = didKeyURLtoPubKeyHex(didkeyURL);
     const publicKey = publicKeyIntToUint8ArrayPointPair(ECPointDecompress(fromString(compressedPublicKey,'base16'))); // actually I need to create a function called compressed to raw
@@ -447,11 +513,54 @@ export class P256Provider implements DIDProvider {
   function octetToRaw(publicKey: octetPoint) {
      return toString(publicKey.xOctet,'hex')+toString(publicKey.yOctet,'hex')
   }
+  */
   
+  
+
+   async function matchDIDKeyWithRemote(didkeyURL: string,stream: any) : Promise<string> {
+    const compressedPublicKey = didKeyURLtoPubKeyHex(didkeyURL);
+   // console.log(compressedPublicKey);
+   //nist_weierstrauss.secp256r1.ECPointDecompress
+   const publicKey = nist_weierstrauss.nist_weierstrauss_common.publicKeyIntToUint8ArrayPointPair(nist_weierstrauss.secp256r1.ECPointDecompress(fromString(compressedPublicKey,'hex')))
+  //const publicKey = publicKeyIntToUint8ArrayPointPair(ECPointDecompress(fromString(compressedPublicKey,'hex'))); // actually I need to create a function called compressed to raw
+   // console.log(publicKey);
+    const publicRawKey = octetToRaw(publicKey)
+   // console.log(publicRawKey);
+    let result = await matchPublicKeyWithRemote(publicRawKey,stream)
+    if(result.length > 1) {
+      return rpcToDID(result);
+     } else {
+       return didkeyURL;
+     }
+  }
+  
+  async function matchPublicKeyWithRemote(publicKey: string,stream: any) : Promise<string> {
+    let rpcPayload = '0'+'1200'+publicKey;
+    stream.write(rpcPayload);
+   // console.log('rpcpaylod'+rpcPayload);
+    let result = await waitForEvent(stream,'data');  
+   // console.log('result is:'+result);
+    return result; 
+  }
+  
+  function octetToRaw(publicKey: octetPoint) {
+     return toString(publicKey.xOctet,'hex')+toString(publicKey.yOctet,'hex')
+  }
+  
+  function rpcToDID(response) : string {
+    let result = response.split(',');
+    //compressedKeyInHexfromRaw(result[1])
+    // return result[1];
+    const multicodecName = 'p256-pub';
+    return encodeDIDfromHexString(multicodecName,compressedKeyInHexfromRaw(result[1]))
+}
+
   async function getPublicKey(stream) : Promise<string> {
     /// look at the RPC call to get the public key
-    let rpcPayload = '2'+'1200';
+    let rpcPayload = '1'+'1200';
     stream.write(rpcPayload);
-    let result = await waitForEvent(stream,'data');
-    return result;
+    let preResult = await waitForEvent(stream,'data');
+    console.log(preResult);
+    let result = preResult.split(',');
+    return result[1];
   }
