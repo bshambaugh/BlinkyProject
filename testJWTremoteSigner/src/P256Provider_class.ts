@@ -1,5 +1,7 @@
 import { Signer } from 'did-jwt'
 import { createJWS } from 'did-jwt'
+//import { Signer } from '/home/ubuntu/Downloads/did-jwt/lib'
+//import { createJWS } from '/home/ubuntu/Downloads/did-jwt/lib'
 import stringify from 'fast-json-stable-stringify'
 import type {
   AuthParams,
@@ -14,7 +16,7 @@ import type { HandlerMethods, RPCRequest, RPCResponse, SendRequestFunc } from 'r
 import { encodeDIDfromHexString, compressedKeyInHexfromRaw, didKeyURLtoPubKeyHex } from 'did-key-creator'
 import { fromString } from 'uint8arrays/from-string'
 import { toString } from 'uint8arrays/to-string'
-import * as u8a from 'uint8arrays'
+//import * as u8a from 'uint8arrays'
 import * as http from 'http'
 import * as WebSocket from 'websocket-stream'
 import * as nist_weierstrauss from 'nist-weierstrauss'

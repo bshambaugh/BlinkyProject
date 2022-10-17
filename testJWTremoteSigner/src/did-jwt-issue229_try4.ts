@@ -20,6 +20,7 @@ import type {
 import { RPCError, createHandler } from 'rpc-utils'
 import type { HandlerMethods, RPCRequest, RPCResponse, SendRequestFunc } from 'rpc-utils'
 import { encodeDIDfromHexString, compressedKeyInHexfromRaw, didKeyURLtoPubKeyHex } from 'did-key-creator'
+//import * as didKey from 'did-key-creator'
 //import * as keydidresolver from '/home/ubuntu/Downloads/nov22nd/js-ceramic/packages/key-did-resolver/lib/index.js'  // I cannot import this ...
 import * as nist_weierstrass from 'nist-weierstrauss'
 import {octetPoint} from 'nist-weierstrauss'
