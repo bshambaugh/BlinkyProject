@@ -7,6 +7,10 @@ In another use case someone thinks it would be great to have augmented reality w
 
 Perhaps using this underlying tech, referred to some as a protocol development, in a real world scavenger hunt adventure game could be interesting. By combining verifiable credentials, OCAPs (like UCAN that allow for off network) and embeedded devices motors, lights, sensors, etc could be activated based on a players progression in the game.
 
+--> (edit) OCAPS: zcap-ld (https://w3c-ccg.github.io/zcap-spec/#capabilities-vs-access-control-lists,https://github.com/WebOfTrustInfo/rwot5-boston/blob/master/draft-documents/lds-ocap/lds-ocap.md)
+--> (edit) UCAN: https://twit.tv/shows/floss-weekly/episodes/681, https://github.com/ucan-wg/, https://github.com/web3-storage
+--> (edit) for your game notice that hashes are determininstic but not reversabile and cryptographic signatures are verifiable (for visiting one station after the other you could hash then sign data, then gossip to all of the nodes to find the signer? ...I had an elegant paper sketch that might have more....must find)
+
 Ramblings ...
 "People are good at verifying digital credentials with computers and cell phones, but not so much if you want to open a gate or do it over a low bandwidth extended network.
 Brent Shambaugh  10 minutes ago
@@ -47,6 +51,8 @@ https://github.com/bshambaugh/BlinkyProject/blob/master/CubeCellandHeltecESP32_t
 12:30  
 https://github.com/bshambaugh/BlinkyProject/blob/master/CubeCellandHeltecESP32_try7/edgeDevices/ESP32_ToDo/CubeCell_LoRa_To_ESP32_RX_To_NodeJS.ino  
 https://github.com/bshambaugh/BlinkyProject/blob/master/CubeCellandHeltecESP32_try7/edgeDevices/ESP32_ToDo/NodeJS_To_ESP32_ToLoRa_ToCubecell_TX.ino  
+ 
+  ----> edit: some of the bidirectional LoRa code was put together here: https://www.youtube.com/watch?v=EjLkEAJZ0sY (Bidirectional Communication Between Heltec ESP32 Lora and Heltec CubeCell)
 12:31  
 remote signer code:  
 12:31  
