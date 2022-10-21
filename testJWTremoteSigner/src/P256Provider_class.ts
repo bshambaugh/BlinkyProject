@@ -54,9 +54,11 @@ setInterval(function(){
     //console.log(resolvedProvider) // I tried putting resolvedProvider in the place of provider, but I don't know how to fix the send requirement.
     const didObject = new DID({ provider , resolver: getResolver() })
     // const didObject = new DID({ provider , resolver: KeyResolver.getResolver() })
+ 
     const auth = await didObject.authenticate()
     console.log('auth is');
     console.log(auth);
+    
 
     // use the didObject in your standard ceramic things
     
@@ -68,7 +70,7 @@ setInterval(function(){
 server.listen(3000);
 
 async function getSignature(stream,string) {
-    stream.write(string);
+    stream.write('2'+'1200'+string);
     let result = await waitForEvent(stream,'data');
     //console.log(result);
     return result;
