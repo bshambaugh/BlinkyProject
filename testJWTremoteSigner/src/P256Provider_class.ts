@@ -54,11 +54,11 @@ setInterval(function(){
     //console.log(resolvedProvider) // I tried putting resolvedProvider in the place of provider, but I don't know how to fix the send requirement.
     const didObject = new DID({ provider , resolver: getResolver() })
     // const didObject = new DID({ provider , resolver: KeyResolver.getResolver() })
- 
+
     const auth = await didObject.authenticate()
     console.log('auth is');
     console.log(auth);
-    
+
 
     // use the didObject in your standard ceramic things
     
@@ -97,7 +97,8 @@ function remoteP256Signer(stream): Signer {
     did: string,
     protectedHeader: Record<string, any> = {}
   ) => {
-    const kid = `${did}#${did.split(':')[2]}`
+   const kid = `${did}#${did.split(':')[2]}`
+   //  const kid = `${did}`
     const signer = remoteP256Signer(stream) // see remoteP256Signer.ts // const signer = EdDSASigner(secretKey)
     const header = toStableObject(Object.assign(protectedHeader, { kid, alg: 'ES256' }))  /// see https://datatracker.ietf.org/doc/html/rfc7518
     return createJWS(typeof payload === 'string' ? payload : toStableObject(payload), signer, header)
