@@ -21,8 +21,9 @@ import * as http from 'http'
 import * as WebSocket from 'websocket-stream'
 import * as nist_weierstrauss from 'nist-weierstrauss'
 import {octetPoint} from 'nist-weierstrauss'
-
-import { getResolver } from 'key-did-resolver'
+// check the docs here: https://www.npmjs.com/package/key-did-resolver
+import KeyResolver from 'key-did-resolver'
+//import { getResolver } from 'key-did-resolver'
 // import KeyResolver from '@ceramicnetwork/key-did-resolver'
 import { DID } from 'dids'
 
@@ -52,8 +53,9 @@ setInterval(function(){
     
     // const resolvedProvider = (await provider).send
     //console.log(resolvedProvider) // I tried putting resolvedProvider in the place of provider, but I don't know how to fix the send requirement.
-    const didObject = new DID({ provider , resolver: getResolver() })
-    // const didObject = new DID({ provider , resolver: KeyResolver.getResolver() })
+   // const didObject = new DID({ provider , resolver: getResolver() })
+   // I am not sure why this is not working, fidget around with other people's code and see if you can get something to work...
+  const didObject = new DID({ provider , resolver: KeyResolver.getResolver() })
 
     const auth = await didObject.authenticate()
     console.log('auth is');
