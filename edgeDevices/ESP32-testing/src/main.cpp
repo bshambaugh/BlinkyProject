@@ -4,8 +4,8 @@
 #include <WebSocketClient.h>
 #include <Wire.h>
 #include <concatenateArray.h>
-#include <protected.h>
-//#include "utils.h"
+//#include <protected.h>
+// #include "utils.h"
 
 #define BUFFER_SIZE                                 30 // Define the payload size here
 
@@ -45,8 +45,75 @@ char type[5];
 char curve[5];
 char payload[200];
 
+const byte MaxByteArraySize = 32;
+byte byteArray[MaxByteArraySize] = {0};
+
 //*********************************************************************************************************************
 //***************function definitions**********************************************************************************
+
+// source: https://forum.arduino.cc/t/hex-string-to-byte-array/563827
+// reply: johnwasser, Dec '18post #4
+
+byte nibble(char c)
+{
+  if (c >= '0' && c <= '9')
+    return c - '0';
+
+  if (c >= 'a' && c <= 'f')
+    return c - 'a' + 10;
+
+  if (c >= 'A' && c <= 'F')
+    return c - 'A' + 10;
+
+  return 0;  // Not a valid hexadecimal character
+}
+
+void hexCharacterStringToBytes(byte *byteArray, const char *hexString)
+{
+  bool oddLength = strlen(hexString) & 1;
+
+  byte currentByte = 0;
+  byte byteIndex = 0;
+
+  for (byte charIndex = 0; charIndex < strlen(hexString); charIndex++)
+  {
+    bool oddCharIndex = charIndex & 1;
+
+    if (oddLength)
+    {
+      // If the length is odd
+      if (oddCharIndex)
+      {
+        // odd characters go in high nibble
+        currentByte = nibble(hexString[charIndex]) << 4;
+      }
+      else
+      {
+        // Even characters go into low nibble
+        currentByte |= nibble(hexString[charIndex]);
+        byteArray[byteIndex++] = currentByte;
+        currentByte = 0;
+      }
+    }
+    else
+    {
+      // If the length is even
+      if (!oddCharIndex)
+      {
+        // Odd characters go into the high nibble
+        currentByte = nibble(hexString[charIndex]) << 4;
+      }
+      else
+      {
+        // Odd characters go into low nibble
+        currentByte |= nibble(hexString[charIndex]);
+        byteArray[byteIndex++] = currentByte;
+        currentByte = 0;
+      }
+    }
+  }
+}
+
 void wsconnect(){
   // Connect to the websocket server
   if (client.connect(host, espport)) {
@@ -198,11 +265,22 @@ void websocketSendPublicKey() {
 
 // refactor this with sendStringoverWebSocket
 // gettheSignature
+// payload should be 64 hex character string (32 bytes)
 void websocketGetSignature(String payload) {
          Serial.println("Okay, I am getting the Signature");
+         Serial.println(payload);
          const char* payload_str = payload.c_str();
-         (String(*payload_str,strlen(payload_str))).getBytes(bufferString,64);  /// copies data characters into bufferString as a byteString that can be signed
-         atecc.createSignature(bufferString);
+       
+         hexCharacterStringToBytes(byteArray, payload_str);
+       //  (String(*payload_str,strlen(payload_str))).getBytes(bufferString,64);  /// copies data characters into bufferString as a byteString that can be signed
+        
+          for (byte i = 0; i < 32; i++)
+          {
+           // Serial.println(bufferString[i]);
+            Serial.println(byteArray[i]);
+          }
+        // atecc.createSignature(bufferString);
+         atecc.createSignature(byteArray);
          Serial.println(atecc.signature[63]);
          voidArray(129,signatureString);
          mergeArray(64,atecc.signature,signatureString);
@@ -220,7 +298,8 @@ void websocketGetSignature(String payload) {
 
          voidArray(BUFFER_SIZE,txpacket);
 
-         voidUint8Array(64,bufferString);
+       //  voidUint8Array(64,bufferString);
+         voidUint8Array(32,byteArray);
 }
 
 bool compareString(String s1, String s2)
