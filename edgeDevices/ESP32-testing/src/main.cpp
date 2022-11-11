@@ -41,9 +41,12 @@ uint8_t bufferString[64];
 
 bool start = true;
 
+// try commenting this out because they may not be used...
+/*
 char type[5];
 char curve[5];
 char payload[200];
+*/
 
 const byte MaxByteArraySize = 32;
 byte byteArray[MaxByteArraySize] = {0};
@@ -300,8 +303,9 @@ void websocketGetSignature(String payload) {
 
          voidArray(BUFFER_SIZE,txpacket);
 
-       //  voidUint8Array(64,bufferString);
-         voidUint8Array(32,byteArray);
+       //voidUint8Array(64,bufferString);
+      // voidUint8Array(32,byteArray);
+         voidUint8Array(MaxByteArraySize,byteArray);
 }
 
 bool compareString(String s1, String s2)
@@ -370,6 +374,7 @@ void RPC(String &source) {
       } else {
           Serial.println("Invalid packet");
       }
+
 }
 
 void setup() {
@@ -418,7 +423,8 @@ void setup() {
 }
 
 void loop() {
- delay(1000);
+ // delay(1000); /// this delay may need to be changed...
+ delay(250);
 
   if (client.connected()) {
  
@@ -429,6 +435,14 @@ void loop() {
     Serial.println("I am a connected client"); 
 
    RPC(data);
+
+   // I am not sure this is needed, or if this is the place to clear the array .. I'm guessing 
+   // try commenting this out since it may not be used
+   /*
+   voidArray(5,type);
+   voidArray(5,curve);
+   voidArray(200,payload);
+   */
 
    }
 }
