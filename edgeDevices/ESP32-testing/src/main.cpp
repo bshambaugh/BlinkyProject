@@ -16,6 +16,8 @@ String data= "";
 
 // const char* ssid     = "your ssid"; // defined in protected.h
 // const char* password = "your password";  // defined in protected.h
+const char* ssid     = "NETGEAR09"; // defined in protected.h
+const char* password = "silentsky936";  // defined in protected.h
 char path[] = "/";   //identifier of this device
 char host[] = "10.0.0.4"; //replace this ip address with the ip address of your Node.Js server /// hostname -I (in linux)
 const int espport= 3000;
@@ -35,8 +37,8 @@ ATECCX08A atecc;
 char signatureString[129];
 char publicKeyString[129];
 //uint8_t message[32];
-uint8_t bufferString[64];
-//char bufferString[64];
+// uint8_t bufferString[64];
+// char messageString[64];
 // unsigned char bufferString[64];
 
 bool start = true;
@@ -269,6 +271,26 @@ void websocketSendPublicKey() {
 }
 
 // refactor this with sendStringoverWebSocket
+// getthepublicKey
+void websocketSendMessage() {
+        // voidArray(64,messageString);
+        // mergeArray(64,'fun',messageString);
+
+         sprintf(txpacket+strlen(txpacket),"%s","message"); // add another thing (by bret)
+         sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
+         sprintf(txpacket+strlen(txpacket),"%s","something_is_wrong"); // add another thing (by bret), make this messageString
+        // sprintf(txpacket+strlen(txpacket),"%s","\n"); // add another thing (by bret)
+    
+         Serial.println(txpacket); 
+
+         webSocketClient.sendData(txpacket);
+         
+        // voidArray(129,messageyString);
+
+         voidArray(BUFFER_SIZE,txpacket);
+}
+
+// refactor this with sendStringoverWebSocket
 // gettheSignature
 // payload should be 64 hex character string (32 bytes)
 void websocketGetSignature(String payload) {
@@ -329,10 +351,10 @@ void RPC(String &source) {
       String type = "";
       String curve = "";
       String payload = "";
-      if(((source.charAt(0) == '0') | (source.charAt(0) == '1') | (source.charAt(0) == '2') | (source.charAt(0) == '3')) && (source.length() >= 5)) {
+      if(((source.charAt(0) == '1') | (source.charAt(0) == '2') | (source.charAt(0) == '3') | (source.charAt(0) == '4')) && (source.length() >= 5)) {
            parse_packet(&source,&type,&curve,&payload);
 
-           if(compareString("0",type)) {
+           if(compareString("1",type)) {
               Serial.println("Match Public Key to stored\n");
               // some function that grabs the public key from the cryptochip and matches to what is sent
               // actually verifyKeyDID should only take the hex string as an argument, AFAIK this function has not been battle tested
@@ -356,23 +378,25 @@ void RPC(String &source) {
               }
             }
 
-            if(compareString("1",type)) {
+            if(compareString("2",type)) {
                 Serial.println("Here is the public key of my cryptographic co-processor\n");
                 websocketSendPublicKey();
             }
 
-            if(compareString("2",type)) {
+            if(compareString("3",type)) {
                  if(payload.length() > 0) {
                      Serial.println("Sign the payload\n");
                      websocketGetSignature(payload);  // this needs to refactored to sign the payload
                  }
             }
 
-            if(compareString("3",type)) {
-                Serial.println("I have a message\n");
+            if(compareString("4",type)) {
+                Serial.println("I have a message that isn't implemented\n");
+                websocketSendMessage();
             }
       } else {
           Serial.println("Invalid packet");
+          websocketSendMessage();
       }
 
 }
