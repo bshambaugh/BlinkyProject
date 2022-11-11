@@ -225,8 +225,10 @@ bool verifyKeyDID(const String payload) {
    Serial.println("my public key string is");
    Serial.println(publicKeyString);
    if(char_sequence_compare(payload_str,publicKeyString)) {
+    voidArray(129,publicKeyString);
     return true;
    } else {
+    voidArray(129,publicKeyString);
     return false;
   }
    // if the payload matches the publicKeyString return true
