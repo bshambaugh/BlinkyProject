@@ -9,6 +9,11 @@
 
 #define BUFFER_SIZE                                 30 // Define the payload size here
 
+// stuff for soft access point
+// Set web server port number to 80
+WiFiServer server(80);
+
+
 char txpacket[BUFFER_SIZE];
 
 boolean handshakeFailed=0;
@@ -16,8 +21,17 @@ String data= "";
 
 // const char* ssid     = "your ssid"; // defined in protected.h
 // const char* password = "your password";  // defined in protected.h
+// const char* ssid     = "Museum_2nd_floor"; // defined in protected.h
+const char* ssid = "ESP32-Access-Point";
+const char* password = "123456789";
+//const char* password = "";  // defined in protected.h
 char path[] = "/";   //identifier of this device
-char host[] = "10.0.0.4"; //replace this ip address with the ip address of your Node.Js server /// hostname -I (in linux)
+//char host[] = "10.0.0.4"; //replace this ip address with the ip address of your Node.Js server /// hostname -I (in linux)
+//char host[] = "172.20.10.2"; //replace this ip address with the ip address of your Node.Js server /// hostname -I (in linux)
+char host[] = "192.168.4.2";
+//char host[] = "192.168.4.3";
+//char host[] = "172.17.0.1";
+
 const int espport= 3000;
 
 WebSocketClient webSocketClient;
@@ -329,7 +343,7 @@ void RPC(String &source) {
       String type = "";
       String curve = "";
       String payload = "";
-      if(((source.charAt(0) == '0') | (source.charAt(0) == '1') | (source.charAt(0) == '2') | (source.charAt(0) == '3')) && (source.length() >= 5)) {
+      if((source.length() >= 5) && ((source.charAt(0) == '0') || (source.charAt(0) == '1') || (source.charAt(0) == '2') || (source.charAt(0) == '3'))) {
            parse_packet(&source,&type,&curve,&payload);
 
            if(compareString("0",type)) {
@@ -345,7 +359,8 @@ void RPC(String &source) {
               if(verifyKeyDID(payload)) {
                 Serial.println("You guessed my name");
                 // websocketsend 1
-                sendStringoverWebSocket("1"); // check to see if this works
+                // the code is complaining about this, so just comment it out... will need it later
+              //  sendStringoverWebSocket("1"); // check to see if this works
                 // construct a function to send back arbitary data over websockets, follow the pattern in websocketSendPublicKey and websocketGetSignature
                } else {
                 Serial.println("You did not guess my name");
@@ -405,7 +420,9 @@ void setup() {
   Serial.print("Connecting to ");
   Serial.println(ssid);
   
-  WiFi.begin(ssid, password);
+  //WiFi.begin(ssid, password);
+  /*
+  WiFi.begin(ssid,NULL);
   
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -416,6 +433,15 @@ void setup() {
   Serial.println("WiFi connected");  
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+  */
+ // code to run as a softAP and not use router
+ WiFi.softAP(ssid,password);
+
+IPAddress IP = WiFi.softAPIP();
+Serial.print("AP IP address: ");
+Serial.println(IP);
+
+server.begin();
 
   delay(1000);
   
@@ -430,6 +456,10 @@ void loop() {
  
     // the getSignature and getPublicKey will process all of the requests from the Node.js server.
     webSocketClient.getData(data); 
+
+    Serial.println("start od the data:");
+    Serial.println(data);
+    Serial.println("end od the data:");
 
     /// only run the code below if 0,1,2 is the first byte...length of string should be at least two
     Serial.println("I am a connected client"); 
