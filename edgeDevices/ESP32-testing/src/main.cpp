@@ -5,7 +5,10 @@
 #include <Wire.h>
 #include <concatenateArray.h>
 //#include <protected.h>
-// #include "utils.h"
+#include <protected.h>
+#include <websocketserver_config.h>
+
+//#include "utils.h"
 
 #define BUFFER_SIZE                                 30 // Define the payload size here
 
@@ -16,9 +19,10 @@ String data= "";
 
 // const char* ssid     = "your ssid"; // defined in protected.h
 // const char* password = "your password";  // defined in protected.h
-char path[] = "/";   //identifier of this device
-char host[] = "10.0.0.4"; //replace this ip address with the ip address of your Node.Js server /// hostname -I (in linux)
-const int espport= 3000;
+//char path[] = "/";   //identifier of this device
+//char host[] = "10.0.0.4"; //replace this ip address with the ip address of your Node.Js server /// hostname -I (in linux)
+//char host[] = "192.168.1.155";
+//const int espport= 3000;
 
 WebSocketClient webSocketClient;
 unsigned long previousMillis = 0;
