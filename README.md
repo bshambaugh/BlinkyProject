@@ -64,6 +64,9 @@ This is to add talking to ceramic functionality to the Node.js server: https://g
 12:36  
 This is what I am going to try to use on the Node.js side to talk to the :doughnut: code as a remote signer. https://github.com/bshambaugh/BlinkyProject/blob/master/CubeCellandHeltecESP32_try[…]8266_shop_websockets/custom/verifySignature/verifySignatureQ.js  
 
+(well that last link didn't work, try: This came later  https://www.youtube.com/watch?v=VhFydpFg2wg which is basically a hack of https://esp8266-shop.com/blog/websocket-connection-between-esp8266-and-node-js-server/ , 
+https://github.com/bshambaugh/BlinkyProject/blob/master/CubeCellandHeltecESP32_try7/esp8266_shop_websockets/CeramicToDo/esp8266_shop_websockets_try5/websocket_example.js
+
 Here is a visual representation of how the code will fit together:
 ![overview_code_sm.png](readme_images/overview_code_sm.png)
 
