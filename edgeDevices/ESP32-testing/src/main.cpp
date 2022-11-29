@@ -381,29 +381,7 @@ void RPC(String &source) {
 
 }
 
-void setup() {
-  Wire.begin();
-    Serial.begin(115200);
-
-  // check the ESP
-  if (atecc.begin() == true)
-  {
-    Serial.println("Successful wakeUp(). I2C connections are good.");
-  }
-  else
-  {
-    Serial.println("Device not found. Check wiring.");
-    while (1); // stall out forever
-  }
-
-  printInfo(); // see function below for library calls and data handling
-
-  /// print atecc object
-
- // Serial.println(atecc);
-
-  // We start by connecting to a WiFi network
-
+void setupWifi() {
   Serial.println();
   Serial.println();
   Serial.print("Connecting to ");
@@ -422,7 +400,32 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   delay(1000);
-  
+}
+
+void setupCryptoChip() {
+   // check the ESP
+  if (atecc.begin() == true)
+  {
+    Serial.println("Successful wakeUp(). I2C connections are good.");
+  }
+  else
+  {
+    Serial.println("Device not found. Check wiring.");
+    while (1); // stall out forever
+  }
+
+  printInfo(); // see function below for library calls and data handling
+}
+
+void setup() {
+  Wire.begin();
+  Serial.begin(115200);
+
+  setupCryptoChip();
+
+  // We start by connecting to a WiFi network
+  setupWifi();
+
   wsconnect();
 }
 
