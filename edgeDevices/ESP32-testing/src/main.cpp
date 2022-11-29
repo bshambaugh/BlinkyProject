@@ -10,6 +10,7 @@
 
 //#include "utils.h"
 
+// some of the variable declarations below could exist in their own file
 #define BUFFER_SIZE                                 30 // Define the payload size here
 
 char txpacket[BUFFER_SIZE];
@@ -61,6 +62,7 @@ byte byteArray[MaxByteArraySize] = {0};
 // source: https://forum.arduino.cc/t/hex-string-to-byte-array/563827
 // reply: johnwasser, Dec '18post #4
 
+// this may be able to exist in its own file.
 byte nibble(char c)
 {
   if (c >= '0' && c <= '9')
@@ -75,6 +77,7 @@ byte nibble(char c)
   return 0;  // Not a valid hexadecimal character
 }
 
+// this may be able to exist in its own file.
 void hexCharacterStringToBytes(byte *byteArray, const char *hexString)
 {
   bool oddLength = strlen(hexString) & 1;
@@ -207,6 +210,7 @@ void printInfo()
 // Modified https://stackoverflow.com/questions/15050766/comparing-the-values-of-char-arrays-in-c#15050807
 // compares two character arrays to see if they have the same sequence of characters
 // I might need to modify this to return a pointer or something...
+// this may be able to exist in its own file.
 bool char_sequence_compare(const char a[],const char b[]){
     if(strlen(a) > strlen(b)) {
       for(int i=0;a[i]!='\0';i++){
@@ -224,6 +228,7 @@ bool char_sequence_compare(const char a[],const char b[]){
 
 // verify that the public key matches the key:did you think it is
 // this should take the payload as an argument
+// this may be able to exist in its own file. Are voidArray and merge Array tested?
 bool verifyKeyDID(const String payload) {
    // somehow payload which is a string needs to be converted to a char array
    const char* payload_str = payload.c_str();
@@ -244,15 +249,16 @@ bool verifyKeyDID(const String payload) {
 }
 
 // what happens when the payload is larger than the BUFFER_SIZE ??
+// separate the logic from the sending by websockets, move the logic to its own file
+/*
 void sendStringoverWebSocket(char *payload) {
    sprintf(txpacket+strlen(txpacket),"%s",payload);
    webSocketClient.sendData(txpacket);
    voidArray(BUFFER_SIZE,txpacket);
 }
+*/
 
-// refactor this with sendStringoverWebSocket
-// getthepublicKey
-void websocketSendPublicKey() {
+char getPublicKeyPacket() {
          Serial.println("Okay, I am getting the Public Key");
          Serial.println(atecc.publicKey64Bytes[63]);
          voidArray(129,publicKeyString);
@@ -261,21 +267,72 @@ void websocketSendPublicKey() {
          sprintf(txpacket+strlen(txpacket),"%s","publicKey"); // add another thing (by bret)
          sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
          sprintf(txpacket+strlen(txpacket),"%s",publicKeyString); // add another thing (by bret)
+         voidArray(129,publicKeyString);
+         return *txpacket;
+}
+
+// refactor this with sendStringoverWebSocket
+// getthepublicKey
+// separate the logic from the sending by websockets, move the logic to its own file
+void websocketSendPublicKey() {
+       /*
+         Serial.println("Okay, I am getting the Public Key");
+         Serial.println(atecc.publicKey64Bytes[63]);
+         voidArray(129,publicKeyString);
+         mergeArray(64,atecc.publicKey64Bytes,publicKeyString);
+
+         sprintf(txpacket+strlen(txpacket),"%s","publicKey"); // add another thing (by bret)
+         sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
+         sprintf(txpacket+strlen(txpacket),"%s",publicKeyString); // add another thing (by bret)
+        */
         // sprintf(txpacket+strlen(txpacket),"%s","\n"); // add another thing (by bret)
+
+        *txpacket = getPublicKeyPacket();
     
          Serial.println(txpacket); 
 
          webSocketClient.sendData(txpacket);
          
+         /*
          voidArray(129,publicKeyString);
+         */
 
          voidArray(BUFFER_SIZE,txpacket);
+}
+
+char getSignaturePacket(String payload) {
+         Serial.println("Okay, I am getting the Signature");
+         Serial.println(payload);
+         const char* payload_str = payload.c_str();
+       
+         hexCharacterStringToBytes(byteArray, payload_str);
+       //  (String(*payload_str,strlen(payload_str))).getBytes(bufferString,64);  /// copies data characters into bufferString as a byteString that can be signed
+        
+          for (byte i = 0; i < 32; i++)
+          {
+           // Serial.println(bufferString[i]);
+            Serial.println(byteArray[i]);
+          }
+        // atecc.createSignature(bufferString);
+         atecc.createSignature(byteArray);
+         Serial.println(atecc.signature[63]);
+         voidArray(129,signatureString);
+         mergeArray(64,atecc.signature,signatureString);
+         sprintf(txpacket+strlen(txpacket),"%s","signature"); // add another thing (by bret)
+         sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
+         sprintf(txpacket+strlen(txpacket),"%s",signatureString); // add another thing (by bret)
+         voidArray(129,signatureString);
+         voidUint8Array(MaxByteArraySize,byteArray);
+         return *txpacket;
 }
 
 // refactor this with sendStringoverWebSocket
 // gettheSignature
 // payload should be 64 hex character string (32 bytes)
-void websocketGetSignature(String payload) {
+// separate the logic from the sending by websockets, move the logic to its own file
+void websocketSendSignature(String payload) {
+         *txpacket = getSignaturePacket(payload);
+         /*
          Serial.println("Okay, I am getting the Signature");
          Serial.println(payload);
          const char* payload_str = payload.c_str();
@@ -297,21 +354,43 @@ void websocketGetSignature(String payload) {
          sprintf(txpacket+strlen(txpacket),"%s","signature"); // add another thing (by bret)
          sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
          sprintf(txpacket+strlen(txpacket),"%s",signatureString); // add another thing (by bret)
+         */
        //  sprintf(txpacket+strlen(txpacket),"%s","\n"); // add another thing (by bret)
     
          Serial.println(txpacket); 
 
          webSocketClient.sendData(txpacket);
-         
+         /*
          voidArray(129,signatureString);
+         */
 
          voidArray(BUFFER_SIZE,txpacket);
 
        //voidUint8Array(64,bufferString);
       // voidUint8Array(32,byteArray);
+      /*
          voidUint8Array(MaxByteArraySize,byteArray);
+      */
 }
 
+char getMessageASCIIstring(String payload) {
+      Serial.println("Okay, I am getting the ASCII Message");
+      Serial.println(payload);
+      const char* payload_str = payload.c_str();
+      sprintf(txpacket+strlen(txpacket),"%s","message"); // add another thing (by bret)
+      sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
+      sprintf(txpacket+strlen(txpacket),"%s",payload_str); // add another thing (by bret)
+      return *txpacket;
+}
+
+void websocketSendASCIIstring(String payload) {
+    *txpacket = getMessageASCIIstring(payload);
+     Serial.println(txpacket); 
+     webSocketClient.sendData(txpacket);
+     voidArray(BUFFER_SIZE,txpacket);
+}
+
+// this can move to it's own file
 bool compareString(String s1, String s2)
 {  
       if(s1.compareTo(s2) == 0) {
@@ -321,6 +400,7 @@ bool compareString(String s1, String s2)
       }
 }
 
+// this can move to it's own file
 void parse_packet(const String *source, String *type, String *curve, String *payload) {
   *type = (*source).substring(0,1);
  // *curve = (*source).substring(1,4);
@@ -349,7 +429,8 @@ void RPC(String &source) {
               if(verifyKeyDID(payload)) {
                 Serial.println("You guessed my name");
                 // websocketsend 1
-                sendStringoverWebSocket("1"); // check to see if this works
+              //  sendStringoverWebSocket("1"); // check to see if this works
+                websocketSendASCIIstring("1");
                 // construct a function to send back arbitary data over websockets, follow the pattern in websocketSendPublicKey and websocketGetSignature
                } else {
                 Serial.println("You did not guess my name");
@@ -368,7 +449,7 @@ void RPC(String &source) {
             if(compareString("2",type)) {
                  if(payload.length() > 0) {
                      Serial.println("Sign the payload\n");
-                     websocketGetSignature(payload);  // this needs to refactored to sign the payload
+                     websocketSendSignature(payload);  // this needs to refactored to sign the payload
                  }
             }
 
@@ -442,6 +523,8 @@ void loop() {
     Serial.println("I am a connected client"); 
 
    RPC(data);
+
+   websocketSendASCIIstring("1");
 
    // I am not sure this is needed, or if this is the place to clear the array .. I'm guessing 
    // try commenting this out since it may not be used
