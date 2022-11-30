@@ -25,9 +25,11 @@ String data= "";
 //const int espport= 3000;
 
 WebSocketClient webSocketClient;
+/*
 unsigned long previousMillis = 0;
 unsigned long currentMillis;
 unsigned long interval=300; //interval for sending data to the websocket server in ms
+*/
 
 // Use WiFiClient class to create TCP connections
 WiFiClient client;
