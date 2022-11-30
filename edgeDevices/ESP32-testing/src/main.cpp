@@ -244,14 +244,40 @@ bool verifyKeyDID(const String payload) {
 }
 
 // what happens when the payload is larger than the BUFFER_SIZE ??
+/*
 void sendStringoverWebSocket(char *payload) {
    sprintf(txpacket+strlen(txpacket),"%s",payload);
    webSocketClient.sendData(txpacket);
    voidArray(BUFFER_SIZE,txpacket);
 }
+*/
+
+char getPublicKeyPacket() {
+         Serial.println("Okay, I am getting the Public Key");
+         Serial.println(atecc.publicKey64Bytes[63]);
+         voidArray(129,publicKeyString);
+         mergeArray(64,atecc.publicKey64Bytes,publicKeyString);
+
+         sprintf(txpacket+strlen(txpacket),"%s","publicKey"); // add another thing (by bret)
+         sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
+         sprintf(txpacket+strlen(txpacket),"%s",publicKeyString); // add another thing (by bret)
+         voidArray(129,publicKeyString);
+         return *txpacket;
+}
+
+void websocketSendPublicKey() {
+        *txpacket = getPublicKeyPacket();
+    
+         Serial.println(txpacket); 
+
+         webSocketClient.sendData(txpacket);
+
+         voidArray(BUFFER_SIZE,txpacket);
+}
 
 // refactor this with sendStringoverWebSocket
 // getthepublicKey
+/*
 void websocketSendPublicKey() {
          Serial.println("Okay, I am getting the Public Key");
          Serial.println(atecc.publicKey64Bytes[63]);
@@ -271,10 +297,46 @@ void websocketSendPublicKey() {
 
          voidArray(BUFFER_SIZE,txpacket);
 }
+*/
+
+char getSignaturePacket(String payload) {
+         Serial.println("Okay, I am getting the Signature");
+         Serial.println(payload);
+         const char* payload_str = payload.c_str();
+       
+         hexCharacterStringToBytes(byteArray, payload_str);
+       //  (String(*payload_str,strlen(payload_str))).getBytes(bufferString,64);  /// copies data characters into bufferString as a byteString that can be signed
+        
+          for (byte i = 0; i < 32; i++)
+          {
+           // Serial.println(bufferString[i]);
+            Serial.println(byteArray[i]);
+          }
+        // atecc.createSignature(bufferString);
+         atecc.createSignature(byteArray);
+         Serial.println(atecc.signature[63]);
+         voidArray(129,signatureString);
+         mergeArray(64,atecc.signature,signatureString);
+         sprintf(txpacket+strlen(txpacket),"%s","signature"); // add another thing (by bret)
+         sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
+         sprintf(txpacket+strlen(txpacket),"%s",signatureString); // add another thing (by bret)
+         voidArray(129,signatureString);
+         voidUint8Array(MaxByteArraySize,byteArray);
+         return *txpacket;
+}
+
+void websocketSendSignature(String payload) {
+       *txpacket = getSignaturePacket(payload);
+       Serial.println(txpacket); 
+
+       webSocketClient.sendData(txpacket);
+       voidArray(BUFFER_SIZE,txpacket);
+}
 
 // refactor this with sendStringoverWebSocket
 // gettheSignature
 // payload should be 64 hex character string (32 bytes)
+/*
 void websocketGetSignature(String payload) {
          Serial.println("Okay, I am getting the Signature");
          Serial.println(payload);
@@ -310,6 +372,26 @@ void websocketGetSignature(String payload) {
        //voidUint8Array(64,bufferString);
       // voidUint8Array(32,byteArray);
          voidUint8Array(MaxByteArraySize,byteArray);
+}
+*/
+
+char getMessageASCIIstring(String payload) {
+      Serial.println("Okay, I am getting the ASCII Message");
+      Serial.println(payload);
+      const char* payload_str = payload.c_str();
+      /*
+      sprintf(txpacket+strlen(txpacket),"%s","message"); // add another thing (by bret)
+      sprintf(txpacket+strlen(txpacket),"%s",","); // add another thing (by bret)
+      */
+      sprintf(txpacket+strlen(txpacket),"%s",payload_str); // add another thing (by bret)
+      return *txpacket;
+}
+
+void websocketSendASCIIstring(String payload) {
+    *txpacket = getMessageASCIIstring(payload);
+     Serial.println(txpacket); 
+     webSocketClient.sendData(txpacket);
+     voidArray(BUFFER_SIZE,txpacket);
 }
 
 bool compareString(String s1, String s2)
@@ -349,7 +431,8 @@ void RPC(String &source) {
               if(verifyKeyDID(payload)) {
                 Serial.println("You guessed my name");
                 // websocketsend 1
-                sendStringoverWebSocket("1"); // check to see if this works
+              //  sendStringoverWebSocket("1"); // check to see if this works
+                getMessageASCIIstring("1");
                 // construct a function to send back arbitary data over websockets, follow the pattern in websocketSendPublicKey and websocketGetSignature
                } else {
                 Serial.println("You did not guess my name");
@@ -368,7 +451,8 @@ void RPC(String &source) {
             if(compareString("2",type)) {
                  if(payload.length() > 0) {
                      Serial.println("Sign the payload\n");
-                     websocketGetSignature(payload);  // this needs to refactored to sign the payload
+                   //  websocketGetSignature(payload);  // this needs to refactored to sign the payload
+                     websocketSendSignature(payload);
                  }
             }
 
