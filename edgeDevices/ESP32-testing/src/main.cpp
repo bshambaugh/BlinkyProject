@@ -43,7 +43,7 @@ uint8_t bufferString[64];
 //char bufferString[64];
 // unsigned char bufferString[64];
 
-bool start = true;
+// bool start = true;
 
 // try commenting this out because they may not be used...
 /*
@@ -442,7 +442,7 @@ void loop() {
     Serial.println("I am a connected client"); 
 
    RPC(data);
-
+   data= "";
    // I am not sure this is needed, or if this is the place to clear the array .. I'm guessing 
    // try commenting this out since it may not be used
    /*
