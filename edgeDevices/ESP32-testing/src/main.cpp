@@ -413,7 +413,7 @@ void RPC(String &source) {
       String type = "";
       String curve = "";
       String payload = "";
-      if(((source.charAt(0) == '0') | (source.charAt(0) == '1') | (source.charAt(0) == '2') | (source.charAt(0) == '3')) && (source.length() >= 5)) {
+      if(((source.charAt(0) == '0') || (source.charAt(0) == '1') || (source.charAt(0) == '2') || (source.charAt(0) == '3')) && (source.length() >= 5)) {
            parse_packet(&source,&type,&curve,&payload);
 
            if(compareString("0",type)) {
