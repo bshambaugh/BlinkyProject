@@ -1,0 +1,11 @@
+{
+   "name": "blinky utils", 
+   "version": "1.0.0",
+   "description": "Type Conversion and Char Array operations",
+   "repository":
+   {
+       "type": "git",
+       "url": "https://github.com/bshambaugh/blinky_utils.git"
+   }
+}
+
