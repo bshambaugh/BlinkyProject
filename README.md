@@ -76,6 +76,7 @@ feeling has been that it might be better to persist data stored from sensors in 
 
 Here is a link to an early SkyDB + IDX Workshop. https://medium.com/ceramic/idx-and-skydb-joins-forces-for-a-future-of-web3-hackathon-83eff179a9a1
 (IDX and SkyDB join forces for a future of Web3 hackathon - Nov 2 - 23 , 2023) . SkyDB + IDX Workshop (https://www.youtube.com/watch?v=-Y36JvYXwrw). 
+
 I predict I will follow this example code [ceramic ToDo](/CubeCellandHeltecESP32_try7/esp8266_shop_websockets/CeramicToDo/README.md)  
 This will require a P-256 version of [key-did-provider-ed25519](https://github.com/ceramicnetwork/key-did-provider-ed25519) .
 
